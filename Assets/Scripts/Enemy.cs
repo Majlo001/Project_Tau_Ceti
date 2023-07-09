@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour {
     public float attackCooldown = 2f;
     private float cooldownTimer = 0f;
 
+    private FieldOfView fieldOfView;
+
 
 
     void Start()
@@ -28,11 +30,16 @@ public class Enemy : MonoBehaviour {
         _healthBar.UpdateHealthBar(currentHealth, maxHealth);
 
         agent = GetComponent<NavMeshAgent>();
+        fieldOfView = GetComponent<FieldOfView>();
     }
 
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (fieldOfView.canSeePlayer) {
+            agent.destination = player.position;
+        }
 
         if (distanceToPlayer <= attackRange && !isAttacking) {
             agent.isStopped = true;
@@ -40,7 +47,7 @@ public class Enemy : MonoBehaviour {
         }
         else if (distanceToPlayer > attackRange) {
             agent.isStopped = false;
-            agent.destination = player.position;
+            // agent.destination = player.position;
         }
 
         if (isCooldown) {
@@ -58,8 +65,8 @@ public class Enemy : MonoBehaviour {
     {
         transform.LookAt(player);
 
-        // Wykonaj atak (mo¿esz dodaæ tu odpowiedni¹ animacjê ataku)
-        Debug.Log("Przeciwnik atakuje gracza!");
+        //TODO: Animation
+        Debug.Log("Enemy attack");
         player.GetComponent<PlayerController>().TakeDamage(attackDamage);
 
         
