@@ -9,8 +9,8 @@ public class Item : MonoBehaviour
     public float pickupDuration = 3f;
     public float decreaseSpeed = 1f;
 
-    private bool canBePickedUp = false;
-    private bool isBeingPickedUp = false;
+    // private bool canBePickedUp = false;
+    // private bool isBeingPickedUp = false;
     private float pickupTimer = 0f;
 
     public Transform player;
@@ -56,12 +56,12 @@ public class Item : MonoBehaviour
 
     private void ShowTooltip() {
         canvasObject.SetActive(true);
-        canBePickedUp = true;
+        // canBePickedUp = true;
     }
 
     private void HideTooltip() {
         canvasObject.SetActive(false);
-        canBePickedUp = false;
+        // canBePickedUp = false;
         ResetPickup();
     }
 
