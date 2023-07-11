@@ -6,19 +6,31 @@ public class GameManager : MonoBehaviour
 {
     private bool isPaused = false;
     private PlayerController playerController;
+    private InventoryManager inventoryManager;
 
-    void Start(){
+    void Start() {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
     }
 
-    void Update(){
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             if (isPaused) {
                 ResumeGame();
             }
             else {
                 PauseGame();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            if (isPaused) {
+                ResumeGame();
+                inventoryManager.ShowInventory(false);
+            }
+            else {
+                PauseGame();
+                inventoryManager.ShowInventory(true);
             }
         }
     }

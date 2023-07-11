@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public class ItemPickup : MonoBehaviour
 {
     public float pickupDistance = 3f;
     public float pickupDuration = 3f;
@@ -16,6 +16,9 @@ public class Item : MonoBehaviour
     public Transform player;
     public GameObject canvasObject;
     public Slider slider;
+
+
+    public Item item;
 
 
     void Start() {
@@ -73,7 +76,7 @@ public class Item : MonoBehaviour
     private void Collect() {
         Debug.Log("Item collected!");
         canvasObject.SetActive(false);
-        //TODO: Collect
+        InventoryManager.instance.Add(item);
 
         Destroy(gameObject);
     }
