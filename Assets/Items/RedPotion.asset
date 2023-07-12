@@ -17,4 +17,5 @@ MonoBehaviour:
   itemDescription: Red Potion Red Potion Red Potion
   isStackable: 1
   itemValue: 200
+  itemRarity: 1
   itemIcon: {fileID: 21300000, guid: 7e94f29b52138c44db103201417c7eaa, type: 3}

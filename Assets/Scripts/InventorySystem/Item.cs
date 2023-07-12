@@ -9,5 +9,12 @@ public class Item : ScriptableObject {
     public string itemDescription;
     public bool isStackable;
     public int itemValue;
+    public int itemRarity;
     public Sprite itemIcon;
+}
+
+[CreateAssetMenu(fileName = "New Weapon", menuName = "Inventory/Weapon")]
+public class Weapon : Item {
+    public int damage;
+    public int fireDamage;
 }

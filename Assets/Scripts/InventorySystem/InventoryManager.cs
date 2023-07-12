@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public class CustomItem {
+    public Item item;
+    public int itemCount;
+
+    public CustomItem(Item item, int count) {
+        this.item = item;
+        itemCount = count;
+    }
+}
+
+
 public class InventoryManager : MonoBehaviour {
 
     public static InventoryManager instance;
-    public List<Item> items = new List<Item>();
-    // public Dictionary<Item, int> items = new Dictionary<Item, int>();
+    
+    public List<CustomItem> items = new List<CustomItem>();
 
 
     public Transform itemContent;
+    public GameObject inventorySlot;
     public GameObject inventoryItem;
     public GameObject inventoryUI;
 
@@ -26,36 +39,119 @@ public class InventoryManager : MonoBehaviour {
 
         instance = this;
     }
-
-    public void Add(Item item) {
-        items.Add(item);
+    public void Add(Item item, int count = 1) {
+        CustomItem existingItem = items.Find(customItem => customItem.item == item);
+        if (existingItem != null && item.isStackable) {
+            existingItem.itemCount += count;
+        }
+        else {
+            CustomItem newCustomItem = new CustomItem(item, count);
+            items.Add(newCustomItem);
+        }
     }
 
-    public void Remove(Item item) {
-        items.Remove(item);
+    public void Remove(Item item, int count = 1) {
+        CustomItem existingItem = items.Find(customItem => customItem.item == item);
+        if (existingItem != null) {
+            existingItem.itemCount -= count;
+
+            if (existingItem.itemCount <= 0) {
+                items.Remove(existingItem);
+            }
+        }
     }
 
-    public void ListItems() {
-        foreach (Item item in items) {
-            GameObject itemObject = Instantiate(inventoryItem, itemContent);
-            // var itemCount = itemObject.transform.Find("Count").GetComponent<Text>();
-            var itemIcon = itemObject.transform.Find("ItemImage").GetComponent<Image>();
+    public void AddToInventorySlots() {
+        foreach (CustomItem customItem in items) {
+            GameObject slot = Instantiate(inventorySlot, itemContent);
+            GameObject item = Instantiate(inventoryItem, slot.transform);
 
-            // itemCount.text = item.itemCount;
-            itemIcon.sprite = item.itemIcon;
+            Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
+            Image itemImage = item.transform.GetComponent<Image>();
 
-            // Image itemIcon = itemObject.GetComponentInChildren<Image>();
-            // itemIcon.sprite = item.itemIcon;
+            itemCountText.text = customItem.itemCount.ToString();
+            itemImage.sprite = customItem.item.itemIcon;
+        }
+    }
+
+    public void ClearInventorySlots() {
+        foreach (Transform slot in itemContent) {
+            Destroy(slot.gameObject);
+        }
+    }
+
+    public void SortItemsByRarity(bool ascending) {
+        List<CustomItem> sortedItems = new List<CustomItem>(items);
+
+        if (ascending) {
+            sortedItems.Sort((x, y) => x.item.itemRarity.CompareTo(y.item.itemRarity));
+        } else {
+            sortedItems.Sort((x, y) => y.item.itemRarity.CompareTo(x.item.itemRarity));
+        }
+
+        foreach (CustomItem customItem in sortedItems) {
+            Debug.Log(customItem.item.itemName + " (Rarity: " + customItem.item.itemRarity + "): " + customItem.itemCount);
         }
     }
 
     public void ShowInventory(bool show) {
         if (show) {
             inventoryUI.SetActive(true);
-            ListItems();
+            ClearInventorySlots();
+            AddToInventorySlots();
+            AddInventorySlots(10);
+            SortItemsByRarity(false);
         }
         else {
             inventoryUI.SetActive(false);
         }
     }
+
+    public void AddInventorySlots(int slotCount) {
+        for (int i = 0; i < slotCount; i++) {
+            GameObject slot = Instantiate(inventorySlot, itemContent);
+            // GameObject item = Instantiate(inventoryItem, slot.transform);
+
+            // Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
+            // itemCountText.text = "JD";
+        }
+    }
+
+    // public void Add(Item item) {
+    //     if (items.ContainsKey(item)) {
+    //         items[item] += 1;
+    //     } else {
+    //         items[item] = 1;
+    //     }
+    // }
+
+    // public void Remove(Item item, int count) {
+    //     if (items.ContainsKey(item)) {
+    //         items[item] -= count;
+
+    //         if (items[item] <= 0) {
+    //             items.Remove(item);
+    //         }
+    //     }
+    // }
+
+    // public void ListItems() {
+    //     foreach (KeyValuePair<Item, int> pair in items) {
+    //         Debug.Log(pair.Key.itemName + ": " + pair.Value);
+    //     }
+    // }
+
+    // public void SortItemsByRarity(bool ascending) {
+    //     List<KeyValuePair<Item, int>> sortedItems = new List<KeyValuePair<Item, int>>(items);
+
+    //     if (ascending) {
+    //         sortedItems.Sort((x, y) => x.Key.itemRarity.CompareTo(y.Key.itemRarity));
+    //     } else {
+    //         sortedItems.Sort((x, y) => y.Key.itemRarity.CompareTo(x.Key.itemRarity));
+    //     }
+
+    //     foreach (KeyValuePair<Item, int> pair in sortedItems) {
+    //         Debug.Log(pair.Key.name + " (Rarity: " + pair.Key.itemRarity + "): " + pair.Value);
+    //     }
+    // }
 }

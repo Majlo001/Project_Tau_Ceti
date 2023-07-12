@@ -17,4 +17,5 @@ MonoBehaviour:
   itemDescription: Red Rubin from Mordor
   isStackable: 1
   itemValue: 1000
+  itemRarity: 2
   itemIcon: {fileID: 21300000, guid: 00a7f23238a6d7c4a8f9fcf3edc7b3bb, type: 3}
