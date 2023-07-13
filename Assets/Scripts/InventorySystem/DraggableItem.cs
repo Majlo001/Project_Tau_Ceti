@@ -17,8 +17,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
-        // item = GetComponent<CustomItem>();
-        Debug.Log("Item: " + item);
     }
 
     public void OnEndDrag(PointerEventData eventData) {

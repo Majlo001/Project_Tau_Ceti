@@ -51,21 +51,27 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
+    public void ReturnToInvenotry(CustomItem item) {
+        items.Add(item);
+        RefreshInventory();
+    }
+
     public void Remove(CustomItem item) {
         if (item != null) {
             items.Remove(item);
         }
         RefreshInventory();
     }
-    public void RemoveByCount(Item item, int count = 1) {
-        CustomItem existingItem = items.Find(customItem => customItem.item == item);
-        if (existingItem != null) {
-            existingItem.itemCount -= count;
 
-            if (existingItem.itemCount <= 0) {
-                items.Remove(existingItem);
+    public void RemoveByCount(CustomItem item, int count = 1) {
+        if (item != null) {
+            item.itemCount -= count;
+
+            if (item.itemCount <= 0) {
+                items.Remove(item);
             }
         }
+        RefreshInventory();
     }
 
     public void AddToInventorySlots() {
@@ -106,7 +112,7 @@ public class InventoryManager : MonoBehaviour {
         if (show) {
             inventoryUI.SetActive(true);
             RefreshInventory();
-            SortItemsByRarity(false);
+            // SortItemsByRarity(false);
         }
         else {
             inventoryUI.SetActive(false);
@@ -115,6 +121,7 @@ public class InventoryManager : MonoBehaviour {
 
     private void RefreshInventory() {
         ClearInventorySlots();
+        // SortItemsByRarity(false);
         AddToInventorySlots();
         AddInventorySlots(inventorySlotCount - items.Count);
     }
