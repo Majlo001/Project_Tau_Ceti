@@ -21,14 +21,15 @@ public class InventoryManager : MonoBehaviour {
     
     public List<CustomItem> items = new List<CustomItem>();
 
-
     public Transform itemContent;
     public GameObject inventorySlot;
     public GameObject inventoryItem;
     public GameObject inventoryUI;
 
+    public int inventorySlotCount = 10;
+
     void Start(){
-        // ShowInventory(false);
+        ShowInventory(false);
     }
 
     private void Awake() {
@@ -50,7 +51,13 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
-    public void Remove(Item item, int count = 1) {
+    public void Remove(Item item) {
+        CustomItem existingItem = items.Find(customItem => customItem.item == item);
+        if (existingItem != null) {
+            items.Remove(existingItem);
+        }
+    }
+    public void RemoveByCount(Item item, int count = 1) {
         CustomItem existingItem = items.Find(customItem => customItem.item == item);
         if (existingItem != null) {
             existingItem.itemCount -= count;
@@ -99,7 +106,7 @@ public class InventoryManager : MonoBehaviour {
             inventoryUI.SetActive(true);
             ClearInventorySlots();
             AddToInventorySlots();
-            AddInventorySlots(10);
+            AddInventorySlots(inventorySlotCount - items.Count);
             SortItemsByRarity(false);
         }
         else {
@@ -116,42 +123,4 @@ public class InventoryManager : MonoBehaviour {
             // itemCountText.text = "JD";
         }
     }
-
-    // public void Add(Item item) {
-    //     if (items.ContainsKey(item)) {
-    //         items[item] += 1;
-    //     } else {
-    //         items[item] = 1;
-    //     }
-    // }
-
-    // public void Remove(Item item, int count) {
-    //     if (items.ContainsKey(item)) {
-    //         items[item] -= count;
-
-    //         if (items[item] <= 0) {
-    //             items.Remove(item);
-    //         }
-    //     }
-    // }
-
-    // public void ListItems() {
-    //     foreach (KeyValuePair<Item, int> pair in items) {
-    //         Debug.Log(pair.Key.itemName + ": " + pair.Value);
-    //     }
-    // }
-
-    // public void SortItemsByRarity(bool ascending) {
-    //     List<KeyValuePair<Item, int>> sortedItems = new List<KeyValuePair<Item, int>>(items);
-
-    //     if (ascending) {
-    //         sortedItems.Sort((x, y) => x.Key.itemRarity.CompareTo(y.Key.itemRarity));
-    //     } else {
-    //         sortedItems.Sort((x, y) => y.Key.itemRarity.CompareTo(x.Key.itemRarity));
-    //     }
-
-    //     foreach (KeyValuePair<Item, int> pair in sortedItems) {
-    //         Debug.Log(pair.Key.name + " (Rarity: " + pair.Key.itemRarity + "): " + pair.Value);
-    //     }
-    // }
 }
