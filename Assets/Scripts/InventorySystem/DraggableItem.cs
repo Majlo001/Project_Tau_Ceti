@@ -8,6 +8,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public Image image;
     [HideInInspector] public Transform parentAfterDrag;
+    public CustomItem item;
+
 
     public void OnBeginDrag(PointerEventData eventData) {
         Debug.Log("OnBeginDrag");
@@ -15,6 +17,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
+        // item = GetComponent<CustomItem>();
+        Debug.Log("Item: " + item);
     }
 
     public void OnEndDrag(PointerEventData eventData) {

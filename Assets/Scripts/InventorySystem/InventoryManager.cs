@@ -51,11 +51,11 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
-    public void Remove(Item item) {
-        CustomItem existingItem = items.Find(customItem => customItem.item == item);
-        if (existingItem != null) {
-            items.Remove(existingItem);
+    public void Remove(CustomItem item) {
+        if (item != null) {
+            items.Remove(item);
         }
+        RefreshInventory();
     }
     public void RemoveByCount(Item item, int count = 1) {
         CustomItem existingItem = items.Find(customItem => customItem.item == item);
@@ -73,6 +73,7 @@ public class InventoryManager : MonoBehaviour {
             GameObject slot = Instantiate(inventorySlot, itemContent);
             GameObject item = Instantiate(inventoryItem, slot.transform);
 
+            item.GetComponent<DraggableItem>().item = customItem;
             Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
             Image itemImage = item.transform.GetComponent<Image>();
 
@@ -104,14 +105,18 @@ public class InventoryManager : MonoBehaviour {
     public void ShowInventory(bool show) {
         if (show) {
             inventoryUI.SetActive(true);
-            ClearInventorySlots();
-            AddToInventorySlots();
-            AddInventorySlots(inventorySlotCount - items.Count);
+            RefreshInventory();
             SortItemsByRarity(false);
         }
         else {
             inventoryUI.SetActive(false);
         }
+    }
+
+    private void RefreshInventory() {
+        ClearInventorySlots();
+        AddToInventorySlots();
+        AddInventorySlots(inventorySlotCount - items.Count);
     }
 
     public void AddInventorySlots(int slotCount) {
