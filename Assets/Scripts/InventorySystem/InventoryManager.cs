@@ -28,7 +28,7 @@ public class InventoryManager : MonoBehaviour {
     public GameObject inventoryUI;
 
     void Start(){
-        ShowInventory(false);
+        // ShowInventory(false);
     }
 
     private void Awake() {
