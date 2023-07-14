@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RedRubin
   m_EditorClassIdentifier: 
   itemId: 3
+  itemType: 2
   itemName: Red Rubin
   itemDescription: Red Rubin from Mordor
   isStackable: 1

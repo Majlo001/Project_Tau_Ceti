@@ -6,16 +6,13 @@ using UnityEngine.EventSystems;
 public class InventoryDrop : MonoBehaviour, IDropHandler {
 
     private InventoryManager inventoryManager;
-    public CustomItem item = null;
+    public CustomItem item;
     
     void Start() {
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
     }
 
     public void OnDrop(PointerEventData eventData) {
-        // if (transform.childCount > 0) {
-        //     return;
-        // }
 
         Debug.Log("InventoryDrop - OnDrop");
         GameObject droppedItem = eventData.pointerDrag;
@@ -23,8 +20,10 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
 
 
         if (draggableItem.parentAfterDrag.transform.parent.name != "Inventory") {
-            draggableItem.parentAfterDrag = transform;
+            EquipmentSlot equipmentSlot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
+            equipmentSlot.item = null;
 
+            draggableItem.parentAfterDrag = transform;
             item = draggableItem.item;
             inventoryManager.ReturnToInvenotry(item);
             Destroy(draggableItem);
