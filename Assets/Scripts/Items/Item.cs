@@ -12,4 +12,12 @@ public class Item : ScriptableObject {
     public int itemValue;
     public int itemRarity;
     public Sprite itemIcon;
+
+    public virtual string GetTooltipStats() {
+        string text = $"Value: {itemValue}\n" +
+                        $"Type: {itemType}\n" + 
+                        $"Rarity: {itemRarity}";
+
+        return text;
+    }
 }

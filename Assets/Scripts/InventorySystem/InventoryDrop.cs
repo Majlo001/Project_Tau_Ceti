@@ -21,7 +21,7 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
 
         if (draggableItem.parentAfterDrag.transform.parent.name != "Inventory") {
             EquipmentSlot equipmentSlot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
-            equipmentSlot.item = null;
+            equipmentSlot.RemoveItem();
 
             draggableItem.parentAfterDrag = transform;
             item = draggableItem.item;

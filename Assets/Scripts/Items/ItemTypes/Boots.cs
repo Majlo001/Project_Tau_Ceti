@@ -11,4 +11,15 @@ public class Boots : Item {
     public Boots() {
         itemType = 1;
     }
+    
+    public override string GetTooltipStats() {
+        string baseText = base.GetTooltipStats();
+
+        string text = $"{baseText}\n" +
+                        $"Protection: {protection}\n" +
+                        $"Fire Resistance: {fireResistance}\n" +
+                        $"Agility: {agility}";
+
+        return text;
+    }
 }

@@ -15,6 +15,8 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
 
     public void OnDrop(PointerEventData eventData) {
         // TODO: Swapping items
+        // TODO: Equipment manager
+        // TODO: Double click to use / unequip item
 
         if (transform.childCount > 0) {
             return;
@@ -39,5 +41,9 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
             item = draggableItem.item;
             inventoryManager.Remove(item);
         }
+    }
+
+    public void RemoveItem() {
+        item = null;
     }
 }

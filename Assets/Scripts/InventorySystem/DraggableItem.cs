@@ -11,6 +11,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public CustomItem item;
 
 
+    // TODO: Double click to use / equip / unequip item
+
     public void OnBeginDrag(PointerEventData eventData) {
         Debug.Log("OnBeginDrag");
         parentAfterDrag = transform.parent;

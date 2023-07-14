@@ -10,4 +10,14 @@ public class Helmet : Item {
     public Helmet() {
         itemType = 2;
     }
+
+    public override string GetTooltipStats() {
+        string baseText = base.GetTooltipStats();
+
+        string text = $"{baseText}\n" +
+                        $"Protection: {protection}\n" +
+                        $"Fire Resistance: {fireResistance}";
+
+        return text;
+    }
 }

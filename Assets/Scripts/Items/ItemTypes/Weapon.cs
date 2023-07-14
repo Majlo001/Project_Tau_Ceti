@@ -10,4 +10,14 @@ public class Weapon : Item {
     public Weapon() {
         itemType = 0;
     }
+
+    public override string GetTooltipStats() {
+        string baseText = base.GetTooltipStats();
+
+        string text = $"{baseText}\n" +
+                            $"Damage: {damage}\n" +
+                            $"Fire Damage: {fireDamage}";
+
+        return text;
+    }
 }
