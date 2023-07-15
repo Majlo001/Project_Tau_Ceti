@@ -12,8 +12,8 @@ public class TooltipSystem : MonoBehaviour {
         Hide();
     }
 
-    public static void Show(string header, string content, string stats) {
-        current.tooltip.SetText(header, content, stats);
+    public static void Show(string header, string rarity, string content, string stats) {
+        current.tooltip.SetText(header, rarity, content, stats);
         current.tooltip.gameObject.SetActive(true);
     }
     public static void Hide() {

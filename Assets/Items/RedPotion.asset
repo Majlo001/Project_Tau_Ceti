@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RedPotion
   m_EditorClassIdentifier: 
   itemId: 2
+  itemLevel: 1
   itemType: 2
   itemName: Red Potion
   itemDescription: Red Potion Red Potion Red Potion

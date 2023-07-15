@@ -7,6 +7,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     
     private DraggableItem draggableItem;
     public string header;
+    public string rarity;
     [Multiline()] public string content;
     [Multiline()] public string stats;
 
@@ -17,6 +18,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         draggableItem = GetComponent<DraggableItem>();
         header = draggableItem.item.item.itemName;
         content = draggableItem.item.item.itemDescription;
+        rarity = draggableItem.item.item.GetTooltipRarity();
         stats = draggableItem.item.item.GetTooltipStats();
     }
 
@@ -47,7 +49,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
 
         if (isPointerOver) {
-            TooltipSystem.Show(header, content, stats);
+            TooltipSystem.Show(header, rarity, content, stats);
         }
     }
 }

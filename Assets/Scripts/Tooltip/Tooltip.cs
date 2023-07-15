@@ -7,8 +7,11 @@ using UnityEngine.UI;
 public class Tooltip : MonoBehaviour {
     
     public Text headerField;
+    public Text rarityField;
     public Text contentField;
     public Text statsField;
+
+    //TODO: levelField
 
 
     public LayoutElement layoutElement;
@@ -21,13 +24,23 @@ public class Tooltip : MonoBehaviour {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void SetText(string header, string content, string stats) {
+    public void SetText(string header, string rarity, string content, string stats) {
+
+        // Temporary solution
         if (string.IsNullOrEmpty(header)) {
             headerField.gameObject.SetActive(false);
         }
         else {
             headerField.gameObject.SetActive(true);
             headerField.text = header;
+        }
+
+        if (string.IsNullOrEmpty(rarity)) {
+            rarityField.gameObject.SetActive(false);
+        }
+        else {
+            rarityField.gameObject.SetActive(true);
+            rarityField.text = rarity;
         }
 
         if (string.IsNullOrEmpty(content)) {

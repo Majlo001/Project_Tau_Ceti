@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SwordWeapon
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   itemId: 0
+  itemLevel: 2
   itemType: 0
   itemName: 
   itemDescription: 

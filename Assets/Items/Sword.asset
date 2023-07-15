@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   itemId: 1
+  itemLevel: 1
+  itemType: 0
   itemName: Sword
   itemDescription: Just a long sword
   isStackable: 0

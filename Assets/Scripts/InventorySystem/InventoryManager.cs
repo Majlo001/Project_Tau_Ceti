@@ -7,10 +7,20 @@ using UnityEngine.UI;
 public class CustomItem {
     public Item item;
     public int itemCount;
+    public int itemLevel;
+    public bool isUpgraded;
 
-    public CustomItem(Item item, int count) {
+    public CustomItem(Item item, int count, int level = 0) {
         this.item = item;
         itemCount = count;
+        isUpgraded = false;
+
+        if (level == 0) {
+            itemLevel = item.itemLevel;
+        }
+        else {
+            itemLevel = level;
+        }
     }
 }
 
@@ -125,6 +135,7 @@ public class InventoryManager : MonoBehaviour {
         }
         else {
             inventoryUI.SetActive(false);
+            TooltipSystem.Hide();
         }
     }
 

@@ -6,9 +6,9 @@ public class ItemRarityDictionary : MonoBehaviour {
     private static ItemRarityDictionary instance;
     public static ItemRarityDictionary Instance { get { return instance; } }
 
-    public string[] itemRarity = new string[6];
-    public string[] itemColors = new string[6];
-    public Dictionary<string, int> itemRarityLookup;
+    [HideInInspector] public string[] itemRarity = new string[6];
+    [HideInInspector] public string[] itemColors = new string[6];
+    [HideInInspector] public Dictionary<string, int> itemRarityLookup;
 
     private void Awake() {
         if (instance != null && instance != this) {
@@ -30,7 +30,7 @@ public class ItemRarityDictionary : MonoBehaviour {
         itemRarity[3] = "Epic";
         itemRarity[4] = "Legendary";
         itemRarity[5] = "Mythical";
-
+        
         itemColors[0] = "#FFFFFF";  // Biały
         itemColors[1] = "#00FF00";  // Zielony
         itemColors[2] = "#0000FF";  // Niebieski
@@ -57,13 +57,13 @@ public class ItemRarityDictionary : MonoBehaviour {
         }
     }
 
-    private Color HexToColor(string hex) {
+    public Color HexToColor(string hex) {
         Color color = Color.white;
         ColorUtility.TryParseHtmlString(hex, out color);
         return color;
     }
 
-    private Color RGBToColor(int r, int g, int b) {
+    public Color RGBToColor(int r, int g, int b) {
         Color color = Color.white;
         ColorUtility.TryParseHtmlString(ColorUtility.ToHtmlStringRGB(new Color32((byte)r, (byte)g, (byte)b, 255)), out color);
         return color;
