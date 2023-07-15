@@ -81,10 +81,19 @@ public class InventoryManager : MonoBehaviour {
 
             item.GetComponent<DraggableItem>().item = customItem;
             Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
-            Image itemImage = item.transform.GetComponent<Image>();
-
+            Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
+            
             itemCountText.text = customItem.itemCount.ToString();
             itemImage.sprite = customItem.item.itemIcon;
+
+            
+
+            //TODO: Change outline to image or sth.
+            // Outline itemOverlay = item.transform.Find("ItemOverlay").GetComponent<Outline>();
+            
+            // itemOverlay.effectColor = Color.red;
+            // itemOverlay.effectDistance = new Vector2(2f, 2f);
+
         }
     }
 

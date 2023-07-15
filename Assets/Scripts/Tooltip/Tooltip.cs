@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[ExecuteInEditMode()]
+// [ExecuteInEditMode()]
 public class Tooltip : MonoBehaviour {
     
     public Text headerField;
@@ -55,13 +55,16 @@ public class Tooltip : MonoBehaviour {
             layoutElement.enabled = (headerLength > characterWrapLimit || contentLength > characterWrapLimit);
         }
 
-        Vector2 postion = Input.mousePosition;
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 tooltipPosition = mousePosition + new Vector3(30f, -10f, 0f); // Przesunięcie tooltipu względem kursora
 
-        float pivotX = postion.x / Screen.width;
-        float pivotY = postion.y / Screen.height;
+        // Sprawdź, czy tooltip znajduje się na prawej stronie ekranu
+        if (tooltipPosition.x + rectTransform.rect.width > Screen.width)
+        {
+            tooltipPosition -= new Vector3(rectTransform.rect.width + 60f, 0f, 0f); // Przesunięcie tooltipu na lewo
+        }
 
-        rectTransform.pivot = new Vector2(pivotX, pivotY);
-        transform.position = postion;
+        rectTransform.position = tooltipPosition;
     }
 
 }

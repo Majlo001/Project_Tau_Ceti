@@ -22,12 +22,11 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData) {
         isPointerOver = true;
-        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(1f));
-        Debug.Log("OnPointerEnter");
+        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(0.5f));
     }
+
     public void OnPointerExit(PointerEventData eventData) {
         isPointerOver = false;
-        Debug.Log("OnPointerExit");
         if (tooltipCoroutine != null) {
             StopCoroutine(tooltipCoroutine);
             tooltipCoroutine = null;
@@ -36,10 +35,16 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         TooltipSystem.Hide();
     }
 
+
+    //TODO: Fade in / Fade out on tooltip
     private IEnumerator ShowTooltipDelayed(float delay) {
-        Debug.Log("ShowTooltipDelayed");
-        yield return new WaitForSeconds(delay);
-        Debug.Log("Kurwa pokaż się do kurwy nędzy");
+        float startTime = Time.realtimeSinceStartup;
+
+        while (Time.realtimeSinceStartup < startTime + delay) {
+            yield return null;
+            if (!isPointerOver)
+                yield break;
+        }
 
         if (isPointerOver) {
             TooltipSystem.Show(header, content, stats);

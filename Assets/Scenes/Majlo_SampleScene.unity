@@ -1473,6 +1473,7 @@ GameObject:
   - component: {fileID: 859355468}
   - component: {fileID: 859355470}
   - component: {fileID: 859355469}
+  - component: {fileID: 859355471}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -1500,9 +1501,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1271.178, y: -387.36844}
+  m_AnchoredPosition: {x: -36, y: 970}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: -0.16207184, y: 0.15151516}
+  m_Pivot: {x: 0.5304929, y: 1.0779221}
 --- !u!114 &859355465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1619,6 +1620,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &859355471
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859355463}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &859359619
 GameObject:
   m_ObjectHideFlags: 0
