@@ -130,8 +130,8 @@ public class InventoryManager : MonoBehaviour {
     public void ShowInventory(bool show) {
         if (show) {
             inventoryUI.SetActive(true);
-            RefreshInventory();
             // SortItemsByRarity(false);
+            RefreshInventory();
         }
         else {
             inventoryUI.SetActive(false);
@@ -149,10 +149,6 @@ public class InventoryManager : MonoBehaviour {
     public void AddInventorySlots(int slotCount) {
         for (int i = 0; i < slotCount; i++) {
             GameObject slot = Instantiate(inventorySlot, itemContent);
-            // GameObject item = Instantiate(inventoryItem, slot.transform);
-
-            // Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
-            // itemCountText.text = "JD";
         }
     }
 }
