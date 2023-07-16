@@ -113,6 +113,7 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
+    // TODO: Check if it works
     public void SortItemsByRarity(bool ascending) {
         List<CustomItem> sortedItems = new List<CustomItem>(items);
 
@@ -122,9 +123,9 @@ public class InventoryManager : MonoBehaviour {
             sortedItems.Sort((x, y) => y.item.itemRarity.CompareTo(x.item.itemRarity));
         }
 
-        foreach (CustomItem customItem in sortedItems) {
-            Debug.Log(customItem.item.itemName + " (Rarity: " + customItem.item.itemRarity + "): " + customItem.itemCount);
-        }
+        items = sortedItems;
+        sortedItems.Clear();
+        sortedItems = null;
     }
 
     public void ShowInventory(bool show) {

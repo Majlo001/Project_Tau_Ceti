@@ -44,6 +44,8 @@ public class ItemTypeDictionary : MonoBehaviour {
         itemType.Add(1, "Boots");
         itemType.Add(2, "Helmet");
         itemType.Add(3, "Something");
+        itemType.Add(10, "Consumables");
+        itemType.Add(11, "Food");
 
         foreach (KeyValuePair<int, string> pair in itemType) {
             itemTypeReverse.Add(pair.Value, pair.Key);
