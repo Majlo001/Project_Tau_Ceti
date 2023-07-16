@@ -24,6 +24,15 @@ public class ItemTypeDictionary : MonoBehaviour {
     public Dictionary<int, string> itemType;
     public Dictionary<string, int> itemTypeReverse;
 
+
+    public int[] itemTypeWeapons = new int[] { 0 };
+    public int[] itemTypeShields = new int[] { 5 };
+    public int[] itemTypeArmour = new int[] { 1, 2, 3, 4 };
+    public int[] itemTypeConsumables = new int[] { 10, 11, 12 };
+    public int[] itemTypeMaterials = new int[] { 13 };
+    public int[] itemTypeQuestItems = new int[] { 14 };
+ 
+
     private void Awake() {
         if (instance != null && instance != this) {
             Destroy(this.gameObject);
@@ -43,9 +52,15 @@ public class ItemTypeDictionary : MonoBehaviour {
         itemType.Add(0, "Weapon");
         itemType.Add(1, "Boots");
         itemType.Add(2, "Helmet");
-        itemType.Add(3, "Something");
+        itemType.Add(3, "Chestplate");
+        itemType.Add(4, "Leggings");
+        itemType.Add(5, "Shield");
+
         itemType.Add(10, "Consumables");
         itemType.Add(11, "Food");
+        itemType.Add(12, "Potion");
+        itemType.Add(13, "Material");
+        itemType.Add(14, "QuestItem");
 
         foreach (KeyValuePair<int, string> pair in itemType) {
             itemTypeReverse.Add(pair.Value, pair.Key);

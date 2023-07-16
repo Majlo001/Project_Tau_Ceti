@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 
 public class CustomItem {
@@ -38,6 +39,8 @@ public class InventoryManager : MonoBehaviour {
     private EquipmentManager equipmentManager;
 
     public int inventorySlotCount = 10;
+    private bool showAllTypes = true;
+    private int[] currentItemTypes;
 
     void Start(){
         ShowInventory(false);
@@ -110,7 +113,6 @@ public class InventoryManager : MonoBehaviour {
             itemCountText.text = customItem.itemCount.ToString();
             itemImage.sprite = customItem.item.itemIcon;
 
-            
 
             //TODO: Change outline to image or sth.
             // Outline itemOverlay = item.transform.Find("ItemOverlay").GetComponent<Outline>();
@@ -144,6 +146,8 @@ public class InventoryManager : MonoBehaviour {
 
     public void ShowInventory(bool show) {
         if (show) {
+            showAllTypes = true;
+            currentItemTypes = null;
             inventoryUI.SetActive(true);
             // SortItemsByRarity(false);
             RefreshInventory();
@@ -155,15 +159,49 @@ public class InventoryManager : MonoBehaviour {
     }
 
     private void RefreshInventory() {
-        ClearInventorySlots();
-        // SortItemsByRarity(false);
-        AddToInventorySlots();
-        AddInventorySlots(inventorySlotCount - items.Count);
+        if (showAllTypes) {
+            ClearInventorySlots();
+            // SortItemsByRarity(false);
+            AddToInventorySlots();
+            AddInventorySlots(inventorySlotCount - items.Count);
+        } 
+        else {
+            ShowItemsByType(currentItemTypes);
+        }
     }
 
     public void AddInventorySlots(int slotCount) {
         for (int i = 0; i < slotCount; i++) {
             GameObject slot = Instantiate(inventorySlot, itemContent);
         }
+    }
+
+    public void showAllItemTypes() {
+        showAllTypes = true;
+        currentItemTypes = null;
+        RefreshInventory();
+    }
+
+    public void ShowItemsByType(int[] itemTypes) {
+        showAllTypes = false;
+        currentItemTypes = itemTypes;
+
+        ClearInventorySlots();
+
+        foreach (CustomItem customItem in items) {
+            if (itemTypes.Any(itemType => itemType == customItem.item.itemType)) {
+                GameObject slot = Instantiate(inventorySlot, itemContent);
+                GameObject item = Instantiate(inventoryItem, slot.transform);
+
+                item.GetComponent<DraggableItem>().item = customItem;
+                Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
+                Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
+
+                itemCountText.text = customItem.itemCount.ToString();
+                itemImage.sprite = customItem.item.itemIcon;
+            }
+        }
+
+        AddInventorySlots(50);
     }
 }
