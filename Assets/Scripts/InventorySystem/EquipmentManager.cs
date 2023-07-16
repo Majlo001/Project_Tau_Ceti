@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipmentManager : MonoBehaviour {
     
@@ -71,6 +72,25 @@ public class EquipmentManager : MonoBehaviour {
         equippedConsumables[slotNumber1] = equippedConsumables[slotNumber2];
         equippedConsumables[slotNumber2] = tempItem;
         printEquipment();
+    }
+
+    public bool AddToEquippedConsumable(Item item, int count) {
+        for(int i=0; i<equippedConsumables.Length; i++) {
+            if (equippedConsumables[i] != null) {
+                if (equippedConsumables[i].item == item) {
+                    equippedConsumables[i].itemCount += count;
+                    UpdateItemCountText(i);
+                    
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void UpdateItemCountText(int i) {
+        consumableSlots[i].GetComponentInChildren<Text>().text = consumableSlots[i].GetComponent<ConsumableSlot>().item.itemCount.ToString();
     }
 
 

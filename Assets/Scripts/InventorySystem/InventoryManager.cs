@@ -35,11 +35,13 @@ public class InventoryManager : MonoBehaviour {
     public GameObject inventorySlot;
     public GameObject inventoryItem;
     public GameObject inventoryUI;
+    private EquipmentManager equipmentManager;
 
     public int inventorySlotCount = 10;
 
     void Start(){
         ShowInventory(false);
+        equipmentManager = transform.GetComponent<EquipmentManager>();
     }
 
     private void Awake() {
@@ -51,6 +53,18 @@ public class InventoryManager : MonoBehaviour {
         instance = this;
     }
     public void Add(Item item, int count = 1) {
+        if (item == null) {
+            return;
+        }
+
+        if (item.isConsumable) {
+            bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item, count);
+
+            if (isEquippedConsumable) {
+                return;
+            }
+        }
+
         CustomItem existingItem = items.Find(customItem => customItem.item == item);
         if (existingItem != null && item.isStackable) {
             existingItem.itemCount += count;

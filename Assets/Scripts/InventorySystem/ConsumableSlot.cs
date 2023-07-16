@@ -38,6 +38,7 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
         /// Swapping items
         if (consumableParentSlot != null) {
             equipmentManager.SwapConsumable(consumableParentSlot.slotNumber, slotNumber);
+            consumableParentSlot.item = item;
             
             if (item == null) {
                 consumableParentSlot.RemoveItem();
