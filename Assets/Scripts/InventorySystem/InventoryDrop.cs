@@ -16,6 +16,9 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
         GameObject droppedItem = eventData.pointerDrag;
         DraggableItem draggableItem = droppedItem.GetComponent<DraggableItem>();
 
+        if (draggableItem == null) {
+            return;
+        }
 
         if (draggableItem.parentAfterDrag.transform.parent.name != "Inventory") {
             EquipmentSlot slot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
