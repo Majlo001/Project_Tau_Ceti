@@ -31,8 +31,6 @@ public class ItemPickup : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= pickupDistance) {
-            Debug.Log("Item can be collected!");
-
             if (Input.GetKey(KeyCode.E)) {
                 pickupTimer += Time.deltaTime;
                 slider.value = pickupTimer / pickupDuration;
@@ -74,7 +72,6 @@ public class ItemPickup : MonoBehaviour
     }
 
     private void Collect() {
-        Debug.Log("Item collected!");
         canvasObject.SetActive(false);
         InventoryManager.instance.Add(item);
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class ConsumableSlot : MonoBehaviour, IDropHandler {
 
@@ -24,7 +25,8 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
         DraggableItem draggableItem = droppedItem.GetComponent<DraggableItem>();
 
 
-        if (!draggableItem.item.item.isConsumable) {
+        
+        if (!ItemTypeDictionary.Instance.itemTypeConsumables.Contains(draggableItem.item.item.itemType)) {
             Debug.Log("Wrong item type!");
             return;
         }

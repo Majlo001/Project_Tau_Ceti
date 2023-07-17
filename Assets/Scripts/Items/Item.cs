@@ -10,7 +10,6 @@ public class Item : ScriptableObject {
     public string itemName;
     public string itemDescription;
     public bool isStackable;
-    public bool isConsumable = false;
     public int itemValue;
     public int itemRarity;
     public Sprite itemIcon;

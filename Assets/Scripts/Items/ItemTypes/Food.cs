@@ -8,7 +8,6 @@ public class Food : Consumables {
     public Food() {
         itemType = 10;
         isStackable = true;
-        isConsumable = true;
     }
 
     // public override string GetTooltipStats() {

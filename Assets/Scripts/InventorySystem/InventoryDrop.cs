@@ -13,8 +13,6 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
     }
 
     public void OnDrop(PointerEventData eventData) {
-
-        Debug.Log("InventoryDrop - OnDrop");
         GameObject droppedItem = eventData.pointerDrag;
         DraggableItem draggableItem = droppedItem.GetComponent<DraggableItem>();
 

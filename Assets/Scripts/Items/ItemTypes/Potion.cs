@@ -8,6 +8,5 @@ public class Potion : Consumables {
     public Potion() {
         itemType = 10;
         isStackable = true;
-        isConsumable = true;
     }
 }

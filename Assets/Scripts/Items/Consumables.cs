@@ -9,7 +9,6 @@ public class Consumables : Item {
     public Consumables() {
         itemType = 10;
         isStackable = true;
-        isConsumable = true;
     }
 
     public override string GetTooltipStats() {

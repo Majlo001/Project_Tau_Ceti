@@ -60,7 +60,7 @@ public class InventoryManager : MonoBehaviour {
             return;
         }
 
-        if (item.isConsumable) {
+        if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.itemType)) {
             bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item, count);
 
             if (isEquippedConsumable) {
@@ -110,7 +110,12 @@ public class InventoryManager : MonoBehaviour {
             Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
             Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
             
-            itemCountText.text = customItem.itemCount.ToString();
+            if (customItem.item.isStackable && customItem.itemCount > 1) {
+                itemCountText.text = customItem.itemCount.ToString();
+            }
+            else {
+                itemCountText.text = "";
+            }
             itemImage.sprite = customItem.item.itemIcon;
 
 
@@ -197,7 +202,12 @@ public class InventoryManager : MonoBehaviour {
                 Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
                 Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
 
-                itemCountText.text = customItem.itemCount.ToString();
+                if (customItem.item.isStackable && customItem.itemCount > 1) {
+                    itemCountText.text = customItem.itemCount.ToString();
+                }
+                else {
+                    itemCountText.text = "";
+                }
                 itemImage.sprite = customItem.item.itemIcon;
             }
         }
