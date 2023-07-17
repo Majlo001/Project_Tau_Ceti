@@ -24,8 +24,10 @@ public class PlayerController : MonoBehaviour
         move = context.ReadValue<Vector2>();
     }
 
-    public void movePlayer() {
-        if (!isPaused) {
+    public void MovePlayer() {
+        // Tymczasowo dodaję do warunku drugą część
+        if (!isPaused && !DialogueManager.GetInstance().IsDialoguePlaying)
+        {
             Vector3 movement = new Vector3(move.x, 0f, move.y);
 
             if (movement != Vector3.zero){
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
-        movePlayer();
+        MovePlayer();
     }
 
     public void TakeDamage(float damage) {
