@@ -5,6 +5,18 @@ using UnityEngine.UI;
 using System.Linq;
 
 
+public class CustomItemComparer : IComparer<CustomItem> {
+    public int Compare(CustomItem x, CustomItem y) {
+        if (x.item.itemLevel != y.item.itemLevel) {
+            return y.item.itemLevel.CompareTo(x.item.itemLevel);
+        }
+        else {
+            return y.item.itemRarity.CompareTo(x.item.itemRarity);
+        }
+    }
+}
+
+
 public class CustomItem {
     public Item item;
     public int itemCount;
@@ -108,6 +120,7 @@ public class InventoryManager : MonoBehaviour {
 
             item.GetComponent<DraggableItem>().item = customItem;
             Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
+            Text itemLevelText = item.transform.Find("ItemLevel").GetComponent<Text>();
             Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
             
             if (customItem.item.isStackable && customItem.itemCount > 1) {
@@ -116,6 +129,14 @@ public class InventoryManager : MonoBehaviour {
             else {
                 itemCountText.text = "";
             }
+
+            if (customItem.item.itemLevel > 0) {
+                itemLevelText.text = customItem.itemLevel.ToString();
+            }
+            else {
+                itemLevelText.text = "";
+            }
+
             itemImage.sprite = customItem.item.itemIcon;
 
 
@@ -135,18 +156,8 @@ public class InventoryManager : MonoBehaviour {
     }
 
     // TODO: Check if it works
-    public void SortItemsByRarity(bool ascending) {
-        List<CustomItem> sortedItems = new List<CustomItem>(items);
-
-        if (ascending) {
-            sortedItems.Sort((x, y) => x.item.itemRarity.CompareTo(y.item.itemRarity));
-        } else {
-            sortedItems.Sort((x, y) => y.item.itemRarity.CompareTo(x.item.itemRarity));
-        }
-
-        items = sortedItems;
-        sortedItems.Clear();
-        sortedItems = null;
+    public void SortItemsByLevelAndRarity() {
+        items.Sort(new CustomItemComparer());
     }
 
     public void ShowInventory(bool show) {
@@ -154,7 +165,7 @@ public class InventoryManager : MonoBehaviour {
             showAllTypes = true;
             currentItemTypes = null;
             inventoryUI.SetActive(true);
-            // SortItemsByRarity(false);
+            SortItemsByLevelAndRarity();
             RefreshInventory();
         }
         else {
@@ -166,11 +177,11 @@ public class InventoryManager : MonoBehaviour {
     private void RefreshInventory() {
         if (showAllTypes) {
             ClearInventorySlots();
-            // SortItemsByRarity(false);
             AddToInventorySlots();
             AddInventorySlots(inventorySlotCount - items.Count);
         } 
         else {
+            SortItemsByLevelAndRarity();
             ShowItemsByType(currentItemTypes);
         }
     }
@@ -200,14 +211,23 @@ public class InventoryManager : MonoBehaviour {
 
                 item.GetComponent<DraggableItem>().item = customItem;
                 Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
+                Text itemLevelText = item.transform.Find("ItemLevel").GetComponent<Text>();
                 Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
-
+                
                 if (customItem.item.isStackable && customItem.itemCount > 1) {
                     itemCountText.text = customItem.itemCount.ToString();
                 }
                 else {
                     itemCountText.text = "";
                 }
+
+                if (customItem.item.itemLevel > 0) {
+                    itemLevelText.text = customItem.itemLevel.ToString();
+                }
+                else {
+                    itemLevelText.text = "";
+                }
+
                 itemImage.sprite = customItem.item.itemIcon;
             }
         }
