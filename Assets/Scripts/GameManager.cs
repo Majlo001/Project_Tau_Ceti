@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour{
     public bool isMenuOpen = false;
     private bool isPaused = false;
     private bool isLootBoxOpen = false;
+    private bool canPressEscape = true;
 
 
     private void Awake() {
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour{
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (isLootBoxOpen)
+            if (isLootBoxOpen || !canPressEscape)
                 return;
             
             if (isPaused) {
@@ -58,6 +59,10 @@ public class GameManager : MonoBehaviour{
                 inventoryManager.ShowInventory(true);
             }
         }
+
+        if (!canPressEscape)
+            isLootBoxOpen = false;
+            canPressEscape = true;
     }
 
     private void PauseGame() {
@@ -76,6 +81,9 @@ public class GameManager : MonoBehaviour{
 
     public void SetLootBoxOpen(bool isOpen) {
         isLootBoxOpen = isOpen;
+
+        if (!isOpen)
+            canPressEscape = false;
     }
 
 

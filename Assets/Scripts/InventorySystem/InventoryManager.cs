@@ -68,16 +68,14 @@ public class InventoryManager : MonoBehaviour {
         instance = this;
     }
     public void AddItem(Item item, int count = 1) {
-        if (item == null) {
+        if (item == null)
             return;
-        }
 
         if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.itemType)) {
             bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item, count);
 
-            if (isEquippedConsumable) {
+            if (isEquippedConsumable)
                 return;
-            }
         }
 
         CustomItem existingItem = items.Find(customItem => customItem.item == item);
@@ -90,16 +88,14 @@ public class InventoryManager : MonoBehaviour {
         }
     }
     public void AddItem(CustomItem item) {
-        if (item == null) {
+        if (item == null)
             return;
-        }
 
         if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.item.itemType)) {
             bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item.item, item.itemCount);
 
-            if (isEquippedConsumable) {
+            if (isEquippedConsumable)
                 return;
-            }
         }
 
         CustomItem existingItem = items.Find(customItem => customItem.item == item.item);
@@ -117,9 +113,9 @@ public class InventoryManager : MonoBehaviour {
     }
 
     public void Remove(CustomItem item) {
-        if (item != null) {
+        if (item != null)
             items.Remove(item);
-        }
+        
         RefreshInventory();
     }
 
@@ -127,9 +123,8 @@ public class InventoryManager : MonoBehaviour {
         if (item != null) {
             item.itemCount -= count;
 
-            if (item.itemCount <= 0) {
+            if (item.itemCount <= 0)
                 items.Remove(item);
-            }
         }
         RefreshInventory();
     }
