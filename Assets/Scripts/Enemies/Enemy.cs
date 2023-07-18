@@ -82,11 +82,13 @@ public class Enemy : MonoBehaviour {
             }
         }
         else {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (!isLooted) {
+                float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            if (distanceToPlayer <= lootRange) {
-                if (Input.GetKeyDown(KeyCode.E) && !lootSystem.isLootBoxOpen) {
-                    lootSystem.InitializeLootBox(lootItems);
+                if (distanceToPlayer <= lootRange) {
+                    if (Input.GetKeyDown(KeyCode.E) && !lootSystem.isLootBoxOpen) {
+                        lootSystem.InitializeLootBox(lootItems, transform.GetComponent<Enemy>());
+                    }
                 }
             }
         }

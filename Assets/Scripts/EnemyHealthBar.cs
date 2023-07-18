@@ -21,8 +21,7 @@ public class EnemyHealthBar : MonoBehaviour {
         _healthbarSprite.gameObject.SetActive(active);
     }
 
-    void Update()
-    {
+    void Update() {
         transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
     }
 }

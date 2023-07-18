@@ -16,14 +16,52 @@ public class LootSystem : MonoBehaviour {
     public Button CloseBtn;
 
 
+    private PlayerController playerController;
+    private InventoryManager inventoryManager;
+
+    private Enemy currentEnemy;
+
     public bool isLootBoxOpen = false;
     private bool isAutoLootActive = false;
+    private bool canTakeItem = false;
 
     void Start() {
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+
         ShowLootBoxUI(false);
         TakeAllBtn.onClick.AddListener(TakeAllBtnClicked);
         TakeBtn.onClick.AddListener(TakeBtnClicked);
         CloseBtn.onClick.AddListener(CloseBtnClicked);
+    }
+
+    void Update() {
+        if (isLootBoxOpen) {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                isLootBoxOpen = false;
+                ShowLootBoxUI(isLootBoxOpen);
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+                if (selectedItemIndex > 0) {
+                    selectedItemIndex--;
+                    DisplayLootItems();
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+                if (selectedItemIndex < lootItems.Count - 1) {
+                    selectedItemIndex++;
+                    DisplayLootItems();
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && canTakeItem) {
+                TakeItem(selectedItemIndex);
+            }
+            else if (Input.GetKeyDown(KeyCode.Space) && canTakeItem) {
+                TakeAllItems();
+            }
+            canTakeItem = true;
+        }
     }
 
     private void TakeAllBtnClicked() {
@@ -37,13 +75,17 @@ public class LootSystem : MonoBehaviour {
     }
 
     public void ShowLootBoxUI(bool show) {
+        selectedItemIndex = 0;
         lootBoxUI.SetActive(show);
+        GameManager.instance.SetLootBoxOpen(show);
+        playerController.SetPlayerCanMove(!show);
     }
 
-    public void InitializeLootBox(List<CustomItem> items) {
+    public void InitializeLootBox(List<CustomItem> items, Enemy enemy) {
         lootItems = items;
+        currentEnemy = enemy;
         isLootBoxOpen = true;
-        ShowLootBoxUI(true);
+        ShowLootBoxUI(isLootBoxOpen);
         DisplayLootItems();
     }
 
@@ -67,9 +109,11 @@ public class LootSystem : MonoBehaviour {
             itemImage.sprite = lootItems[i].item.itemIcon;
 
 
-            // if (i == selectedItemIndex) {
-            //     itemUI.SetOutlineActive(true);
-            // }
+            if (i == selectedItemIndex) {
+                Outline outline = itemObject.GetComponent<Outline>();
+                if (outline != null)
+                    outline.enabled = true;
+            }
         }
     }
 
@@ -77,5 +121,39 @@ public class LootSystem : MonoBehaviour {
         foreach (Transform child in itemGrid) {
             Destroy(child.gameObject);
         }
+    }
+
+
+    private void TakeItem(int index) {
+        if (lootItems.Count > 0) {
+            CustomItem item = lootItems[index];
+            inventoryManager.AddItem(item);
+            lootItems.RemoveAt(index);
+            currentEnemy.lootItems.RemoveAt(index);
+            DisplayLootItems();
+
+            if (lootItems.Count == 0) {
+                isLootBoxOpen = false;
+                ShowLootBoxUI(isLootBoxOpen);
+                currentEnemy.isLooted = true;
+            }
+        }
+    }
+
+    private void TakeAllItems() {
+        if (lootItems.Count > 0) {
+            foreach (CustomItem item in lootItems) {
+                inventoryManager.AddItem(item);
+            }
+            lootItems.Clear();
+            currentEnemy.lootItems.Clear();
+            currentEnemy.isLooted = true;
+            isLootBoxOpen = false;
+            ShowLootBoxUI(isLootBoxOpen);
+        }
+    }
+
+    private IEnumerator DelayedAction(float time) {
+        yield return new WaitForSeconds(time);
     }
 }

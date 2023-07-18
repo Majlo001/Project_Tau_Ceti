@@ -67,7 +67,7 @@ public class InventoryManager : MonoBehaviour {
 
         instance = this;
     }
-    public void Add(Item item, int count = 1) {
+    public void AddItem(Item item, int count = 1) {
         if (item == null) {
             return;
         }
@@ -87,6 +87,27 @@ public class InventoryManager : MonoBehaviour {
         else {
             CustomItem newCustomItem = new CustomItem(item, count);
             items.Add(newCustomItem);
+        }
+    }
+    public void AddItem(CustomItem item) {
+        if (item == null) {
+            return;
+        }
+
+        if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.item.itemType)) {
+            bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item.item, item.itemCount);
+
+            if (isEquippedConsumable) {
+                return;
+            }
+        }
+
+        CustomItem existingItem = items.Find(customItem => customItem.item == item.item);
+        if (existingItem != null && item.item.isStackable) {
+            existingItem.itemCount += item.itemCount;
+        }
+        else {
+            items.Add(item);
         }
     }
 

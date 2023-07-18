@@ -73,7 +73,7 @@ public class ItemPickup : MonoBehaviour
 
     private void Collect() {
         canvasObject.SetActive(false);
-        InventoryManager.instance.Add(item);
+        InventoryManager.instance.AddItem(item);
 
         Destroy(gameObject);
     }

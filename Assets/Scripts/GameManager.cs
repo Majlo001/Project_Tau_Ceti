@@ -2,11 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
-    private bool isPaused = false;
+public class GameManager : MonoBehaviour{
+
+    public static GameManager instance;
     private PlayerController playerController;
     private InventoryManager inventoryManager;
+
+    public bool isMenuOpen = false;
+    private bool isPaused = false;
+    private bool isLootBoxOpen = false;
+
+
+    private void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     void Start() {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -15,20 +30,30 @@ public class GameManager : MonoBehaviour
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (isLootBoxOpen)
+                return;
+            
             if (isPaused) {
+                isPaused = false;
                 ResumeGame();
             }
             else {
+                isPaused = true;
                 PauseGame();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.I)) {
-            if (isPaused) {
+            if (isPaused)
+                return;
+
+            if (isMenuOpen) {
+                isMenuOpen = false;
                 ResumeGame();
                 inventoryManager.ShowInventory(false);
             }
             else {
+                isMenuOpen = true;
                 PauseGame();
                 inventoryManager.ShowInventory(true);
             }
@@ -37,21 +62,21 @@ public class GameManager : MonoBehaviour
 
     private void PauseGame() {
         Time.timeScale = 0f;
-
-        // TODO: Zatrzymanie aktywności w grze
-        isPaused = true;
-
         Debug.Log("Game paused");
-        playerController.SetPaused(true);
+        playerController.SetPlayerCanMove(false);
     }
 
     private void ResumeGame() {
-        Time.timeScale = 1f;
-
-        // TODO: Wznowienie aktywności w grze
-        isPaused = false;
-
+        if (!isMenuOpen)
+            Time.timeScale = 1f;
+        
         Debug.Log("Game resumed");
-        playerController.SetPaused(false);
+        playerController.SetPlayerCanMove(true);
     }
+
+    public void SetLootBoxOpen(bool isOpen) {
+        isLootBoxOpen = isOpen;
+    }
+
+
 }
