@@ -7,7 +7,6 @@ public class LootSystem : MonoBehaviour {
     
 
     private ScrollRect scrollRect;
-    // private RectTransform contentPanel;
     public float scrollAmountPixels = 120f;
 
     public GameObject lootBoxUI;
@@ -28,14 +27,13 @@ public class LootSystem : MonoBehaviour {
     private Enemy currentEnemy;
 
     public bool isLootBoxOpen = false;
-    private bool isAutoLootActive = false;
+    // private bool isAutoLootActive = false;
     private bool canTakeItem = false;
 
     void Start() {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
         scrollRect = lootBoxScrollArea.GetComponent<ScrollRect>();
-        // contentPanel = scrollRect.content;
 
         ShowLootBoxUI(false);
         TakeAllBtn.onClick.AddListener(TakeAllBtnClicked);
@@ -136,9 +134,6 @@ public class LootSystem : MonoBehaviour {
                 if (outline != null)
                     outline.enabled = true;
             }
-
-            // ScrollToSelectedItem(selectedItemIndex);
-            // contentPanel.anchoredPosition = Vector2.zero;
         }
     }
 
@@ -150,9 +145,16 @@ public class LootSystem : MonoBehaviour {
 
 
     private void TakeItem(int index) {
+        bool canBeTaken = true;
+
         if (lootItems.Count > 0) {
             CustomItem item = lootItems[index];
-            inventoryManager.AddItem(item);
+            canBeTaken = inventoryManager.AddItem(item);
+            if (!canBeTaken) {
+                Debug.Log("Inventory is full!");
+                return;
+            }
+            
             currentEnemy.lootItems.RemoveAt(index);
 
             if (lootItems.Count == 0) {
@@ -169,15 +171,33 @@ public class LootSystem : MonoBehaviour {
     }
 
     private void TakeAllItems() {
+        bool canBeTaken = true;
+        List<CustomItem> itemsToRemove = new List<CustomItem>();
+
         if (lootItems.Count > 0) {
             foreach (CustomItem item in lootItems) {
-                inventoryManager.AddItem(item);
+                canBeTaken = inventoryManager.AddItem(item);
+                if (!canBeTaken) {
+                    Debug.Log("Inventory is full!");
+                    break;
+                }
+                
+                itemsToRemove.Add(item);
             }
-            currentEnemy.lootItems.Clear();
-            currentEnemy.isLooted = true;
-            isLootBoxOpen = false;
-            ShowLootBoxUI(isLootBoxOpen);
+
+            foreach (CustomItem itemToRemove in itemsToRemove) {
+                lootItems.Remove(itemToRemove);
+            }
+            DisplayLootItems();
+
+            if (canBeTaken) {
+                currentEnemy.isLooted = true;
+                isLootBoxOpen = false;
+                ShowLootBoxUI(isLootBoxOpen);
+            }
         }
+
+        itemsToRemove = null;
     }
 
     private void ScrollByPixels(float pixels) {
@@ -189,20 +209,4 @@ public class LootSystem : MonoBehaviour {
         scrollRect.verticalNormalizedPosition += normalizedScrollAmount;
         scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition);
     }
-
-
-
-    // public void SnapTo(RectTransform target) {
-    //     Canvas.ForceUpdateCanvases();
-
-    //     contentPanel.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position) - (Vector2)scrollRect.transform.InverseTransformPoint(target.position);
-    // }
-
-    // public void ScrollToSelectedItem(int selectedItemIndex) {
-    //     if (contentPanel.childCount <= selectedItemIndex)
-    //         return;
-
-    //     RectTransform selectedItem = contentPanel.GetChild(selectedItemIndex).GetComponent<RectTransform>();
-    //     SnapTo(selectedItem);
-    // }
 }

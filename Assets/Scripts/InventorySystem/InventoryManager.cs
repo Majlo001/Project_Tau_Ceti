@@ -50,7 +50,7 @@ public class InventoryManager : MonoBehaviour {
     public GameObject inventoryUI;
     private EquipmentManager equipmentManager;
 
-    public int inventorySlotCount = 10;
+    public int inventorySlotCount = 5;
     private bool showAllTypes = true;
     private int[] currentItemTypes;
 
@@ -67,15 +67,15 @@ public class InventoryManager : MonoBehaviour {
 
         instance = this;
     }
-    public void AddItem(Item item, int count = 1) {
+    public bool AddItem(Item item, int count = 1) {
         if (item == null)
-            return;
+            return false;
 
         if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.itemType)) {
             bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item, count);
 
             if (isEquippedConsumable)
-                return;
+                return true;
         }
 
         CustomItem existingItem = items.Find(customItem => customItem.item == item);
@@ -83,19 +83,25 @@ public class InventoryManager : MonoBehaviour {
             existingItem.itemCount += count;
         }
         else {
+            if (inventorySlotCount <= items.Count) {
+                Debug.Log("Inventory is full");
+                return false;
+            }
+
             CustomItem newCustomItem = new CustomItem(item, count);
             items.Add(newCustomItem);
         }
+        return true;
     }
-    public void AddItem(CustomItem item) {
+    public bool AddItem(CustomItem item) {
         if (item == null)
-            return;
+            return false;
 
         if (ItemTypeDictionary.Instance.itemTypeConsumables.Contains(item.item.itemType)) {
             bool isEquippedConsumable = equipmentManager.AddToEquippedConsumable(item.item, item.itemCount);
 
             if (isEquippedConsumable)
-                return;
+                return true;
         }
 
         CustomItem existingItem = items.Find(customItem => customItem.item == item.item);
@@ -103,13 +109,29 @@ public class InventoryManager : MonoBehaviour {
             existingItem.itemCount += item.itemCount;
         }
         else {
+            if (inventorySlotCount <= items.Count) {
+                Debug.Log("Inventory is full");
+                return false;
+            }
+
             items.Add(item);
         }
+        return true;
     }
 
-    public void ReturnToInvenotry(CustomItem item) {
+    public bool ReturnToInventory(CustomItem item) {
+        if (item == null)
+            return false;
+
+        if (inventorySlotCount <= items.Count) {
+            Debug.Log("Inventory is full");
+            return false;
+        }
         items.Add(item);
         RefreshInventory();
+        
+
+        return true;
     }
 
     public void Remove(CustomItem item) {
@@ -248,6 +270,6 @@ public class InventoryManager : MonoBehaviour {
             }
         }
 
-        AddInventorySlots(50);
+        AddInventorySlots(inventorySlotCount - items.Count);
     }
 }

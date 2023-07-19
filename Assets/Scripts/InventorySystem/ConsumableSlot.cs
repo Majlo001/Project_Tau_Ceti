@@ -54,10 +54,12 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
             childObject.transform.SetParent(parentObject.transform);
         }
         else if (transform.childCount > 0 && item != null) {
-            inventoryManager.ReturnToInvenotry(item);
+            bool canBeReturned = inventoryManager.ReturnToInventory(item);
 
+            // if (canBeReturned) {
             GameObject childObject = transform.GetChild(0).gameObject;
             Destroy(childObject);
+            // }
         }
 
         draggableItem.parentAfterDrag = transform;

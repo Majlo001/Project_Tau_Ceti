@@ -26,11 +26,13 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
         }
 
         if (transform.childCount > 0 && item != null) {
-            inventoryManager.ReturnToInvenotry(item);
+            bool canBeReturned = inventoryManager.ReturnToInventory(item);
 
+            // if (canBeReturned) {
             Transform childTransform = transform.GetChild(0);
             GameObject childObject = childTransform.gameObject;
             Destroy(childObject);
+            // }
         }
         draggableItem.parentAfterDrag = transform;
         item = draggableItem.item;

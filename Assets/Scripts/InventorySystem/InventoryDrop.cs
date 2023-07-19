@@ -16,27 +16,31 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
         GameObject droppedItem = eventData.pointerDrag;
         DraggableItem draggableItem = droppedItem.GetComponent<DraggableItem>();
 
-        if (draggableItem == null) {
+        if (draggableItem == null)
             return;
-        }
 
         if (draggableItem.parentAfterDrag.transform.parent.name != "Inventory") {
-            EquipmentSlot slot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
-            if (slot != null) {
-                slot.RemoveItem();
-            }
-            else {
-                ConsumableSlot consumableSlot = draggableItem.parentAfterDrag.GetComponent<ConsumableSlot>();
-                if (consumableSlot != null) {
-                    consumableSlot.RemoveItem();
-                }
-            }
-
-            draggableItem.parentAfterDrag = transform;
             item = draggableItem.item;
-            inventoryManager.ReturnToInvenotry(item);
-            Destroy(draggableItem);
-            Destroy(droppedItem);
+            bool canBeReturned = inventoryManager.ReturnToInventory(item);
+            Debug.Log("Can be returned: " + canBeReturned);
+
+            if(canBeReturned) {
+                draggableItem.parentAfterDrag = transform;
+                
+                EquipmentSlot slot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
+                if (slot != null) {
+                    slot.RemoveItem();
+                }
+                else {
+                    ConsumableSlot consumableSlot = draggableItem.parentAfterDrag.GetComponent<ConsumableSlot>();
+                    if (consumableSlot != null) {
+                        consumableSlot.RemoveItem();
+                    }
+                }
+
+                Destroy(draggableItem);
+                Destroy(droppedItem);
+            }
         }
     }
 }
