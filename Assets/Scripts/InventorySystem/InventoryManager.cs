@@ -119,18 +119,18 @@ public class InventoryManager : MonoBehaviour {
         return true;
     }
 
-    public bool ReturnToInventory(CustomItem item) {
+    public bool ReturnToInventory(CustomItem item, bool isSwap = false) {
         if (item == null)
             return false;
 
-        if (inventorySlotCount <= items.Count) {
+        if (isSwap != true && inventorySlotCount <= items.Count) {
             Debug.Log("Inventory is full");
             return false;
         }
         items.Add(item);
         RefreshInventory();
+        equipmentManager.UpdateEquippedConsumables();
         
-
         return true;
     }
 
@@ -161,19 +161,15 @@ public class InventoryManager : MonoBehaviour {
             Text itemLevelText = item.transform.Find("ItemLevel").GetComponent<Text>();
             Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
             
-            if (customItem.item.isStackable && customItem.itemCount > 1) {
+            if (customItem.item.isStackable && customItem.itemCount > 1)
                 itemCountText.text = customItem.itemCount.ToString();
-            }
-            else {
+            else
                 itemCountText.text = "";
-            }
 
-            if (customItem.item.itemLevel > 0) {
+            if (customItem.item.itemLevel > 0)
                 itemLevelText.text = customItem.itemLevel.ToString();
-            }
-            else {
+            else
                 itemLevelText.text = "";
-            }
 
             itemImage.sprite = customItem.item.itemIcon;
 
@@ -252,19 +248,15 @@ public class InventoryManager : MonoBehaviour {
                 Text itemLevelText = item.transform.Find("ItemLevel").GetComponent<Text>();
                 Image itemImage = item.transform.Find("ItemImage").GetComponent<Image>();
                 
-                if (customItem.item.isStackable && customItem.itemCount > 1) {
+                if (customItem.item.isStackable && customItem.itemCount > 1)
                     itemCountText.text = customItem.itemCount.ToString();
-                }
-                else {
+                else 
                     itemCountText.text = "";
-                }
 
-                if (customItem.item.itemLevel > 0) {
+                if (customItem.item.itemLevel > 0)
                     itemLevelText.text = customItem.itemLevel.ToString();
-                }
-                else {
+                else
                     itemLevelText.text = "";
-                }
 
                 itemImage.sprite = customItem.item.itemIcon;
             }

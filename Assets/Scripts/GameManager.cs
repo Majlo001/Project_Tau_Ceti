@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour{
     public static GameManager instance;
     private PlayerController playerController;
     private InventoryManager inventoryManager;
+    private LootSystem lootSystem;
 
     public bool isMenuOpen = false;
     private bool isPaused = false;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour{
     void Start() {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        lootSystem = GameObject.Find("InventoryManager").GetComponent<LootSystem>();
     }
 
     void Update() {
@@ -36,7 +38,9 @@ public class GameManager : MonoBehaviour{
             
             if (isPaused) {
                 isPaused = false;
-                ResumeGame();
+
+                if (!isMenuOpen)
+                    ResumeGame();
             }
             else {
                 isPaused = true;
@@ -47,6 +51,11 @@ public class GameManager : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.I)) {
             if (isPaused)
                 return;
+
+            Debug.Log("I pressed: " + isLootBoxOpen);
+            if (isLootBoxOpen){
+                hideLootBox();
+            }
 
             if (isMenuOpen) {
                 isMenuOpen = false;
@@ -60,9 +69,10 @@ public class GameManager : MonoBehaviour{
             }
         }
 
-        if (!canPressEscape)
+        if (!canPressEscape) {
             isLootBoxOpen = false;
             canPressEscape = true;
+        }
     }
 
     private void PauseGame() {
@@ -86,5 +96,8 @@ public class GameManager : MonoBehaviour{
             canPressEscape = false;
     }
 
-
+    public void hideLootBox() {
+        isLootBoxOpen = false;
+        lootSystem.ShowLootBoxUI(isLootBoxOpen);
+    }
 }

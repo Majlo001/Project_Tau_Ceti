@@ -85,6 +85,7 @@ public class LootSystem : MonoBehaviour {
     }
 
     public void ShowLootBoxUI(bool show) {
+        isLootBoxOpen = show;
         selectedItemIndex = 0;
         lootBoxUI.SetActive(show);
         GameManager.instance.SetLootBoxOpen(show);

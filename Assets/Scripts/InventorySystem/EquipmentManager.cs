@@ -13,6 +13,7 @@ public class EquipmentManager : MonoBehaviour {
     public GameObject chestplateSlot;
     public GameObject bootsSlot;
 
+    public int equipmentSlotCount = 4;
     public GameObject[] consumableSlots = new GameObject[4];
     public CustomItem[] equippedConsumables = new CustomItem[4];
 
@@ -59,7 +60,7 @@ public class EquipmentManager : MonoBehaviour {
         }
 
         equippedConsumables[slotNumber] = item;
-        printEquipment();
+        PrintConsumables();
     }
 
     public void UnequipConsumable(int slotNumber) {
@@ -71,7 +72,7 @@ public class EquipmentManager : MonoBehaviour {
         
         equippedConsumables[slotNumber1] = equippedConsumables[slotNumber2];
         equippedConsumables[slotNumber2] = tempItem;
-        printEquipment();
+        PrintConsumables();
     }
 
     public bool AddToEquippedConsumable(Item item, int count) {
@@ -94,11 +95,11 @@ public class EquipmentManager : MonoBehaviour {
     }
 
 
-    public void printEquipment() {
+    public void PrintConsumables() {
         string temp = "";
         string temptext;
 
-        for(int i=0; i<4; i++){
+        for(int i=0; i<equipmentSlotCount; i++){
             if (consumableSlots[i].GetComponent<ConsumableSlot>().item != null) {
                 temptext = consumableSlots[i].GetComponent<ConsumableSlot>().item.item.itemName;
             } else {
@@ -113,5 +114,16 @@ public class EquipmentManager : MonoBehaviour {
             }
         }
         Debug.Log(temp);
+    }
+
+    public void UpdateEquippedConsumables() {
+        for (int i = 0; i < equipmentSlotCount; i++) {
+            if (equippedConsumables[i] != null) {
+                if (consumableSlots[i].transform.childCount == 0) {
+                    equippedConsumables[i] = null;
+                    consumableSlots[i].GetComponent<ConsumableSlot>().item = null;
+                }
+            }
+        }
     }
 }

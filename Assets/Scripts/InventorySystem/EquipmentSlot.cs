@@ -26,7 +26,7 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
         }
 
         if (transform.childCount > 0 && item != null) {
-            bool canBeReturned = inventoryManager.ReturnToInventory(item);
+            bool canBeReturned = inventoryManager.ReturnToInventory(item, true);
 
             // if (canBeReturned) {
             Transform childTransform = transform.GetChild(0);
