@@ -17,8 +17,11 @@ public class EnemyHealthBar : MonoBehaviour {
         _healthbarSprite.fillAmount = currentHealth / maxHealth;
     }
 
-    void Update()
-    {
+    public void SetHealthBarActive(bool active) {
+        _healthbarSprite.gameObject.SetActive(active);
+    }
+
+    void Update() {
         transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
     }
 }

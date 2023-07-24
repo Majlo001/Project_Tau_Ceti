@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public class ItemPickup : MonoBehaviour
 {
     public float pickupDistance = 3f;
     public float pickupDuration = 3f;
@@ -18,6 +18,9 @@ public class Item : MonoBehaviour
     public Slider slider;
 
 
+    public Item item;
+
+
     void Start() {
         canvasObject.SetActive(false);
         slider.value = 0f;
@@ -28,8 +31,6 @@ public class Item : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= pickupDistance) {
-            Debug.Log("Item can be collected!");
-
             if (Input.GetKey(KeyCode.E)) {
                 pickupTimer += Time.deltaTime;
                 slider.value = pickupTimer / pickupDuration;
@@ -71,10 +72,12 @@ public class Item : MonoBehaviour
     }
 
     private void Collect() {
-        Debug.Log("Item collected!");
         canvasObject.SetActive(false);
-        //TODO: Collect
+        bool canBeCollected = InventoryManager.instance.AddItem(item);
 
-        Destroy(gameObject);
+        if (canBeCollected)
+            Destroy(gameObject);
+        else
+            Debug.Log("Inventory is full");
     }
 }

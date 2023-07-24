@@ -2,44 +2,102 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
-    private bool isPaused = false;
-    private PlayerController playerController;
+public class GameManager : MonoBehaviour{
 
-    void Start(){
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+    public static GameManager instance;
+    private PlayerController playerController;
+    private InventoryManager inventoryManager;
+    private LootSystem lootSystem;
+
+    public bool isMenuOpen = false;
+    private bool isPaused = false;
+    private bool isLootBoxOpen = false;
+    private bool canPressEscape = true;
+
+
+    private void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
-    void Update(){
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+    void Start() {
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        lootSystem = GameObject.Find("InventoryManager").GetComponent<LootSystem>();
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (isLootBoxOpen || !canPressEscape)
+                return;
+            
             if (isPaused) {
-                ResumeGame();
+                isPaused = false;
+
+                if (!isMenuOpen)
+                    ResumeGame();
             }
             else {
+                isPaused = true;
                 PauseGame();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            if (isPaused)
+                return;
+
+            Debug.Log("I pressed: " + isLootBoxOpen);
+            if (isLootBoxOpen){
+                hideLootBox();
+            }
+
+            if (isMenuOpen) {
+                isMenuOpen = false;
+                ResumeGame();
+                inventoryManager.ShowInventory(false);
+            }
+            else {
+                isMenuOpen = true;
+                PauseGame();
+                inventoryManager.ShowInventory(true);
+            }
+        }
+
+        if (!canPressEscape) {
+            isLootBoxOpen = false;
+            canPressEscape = true;
         }
     }
 
     private void PauseGame() {
         Time.timeScale = 0f;
-
-        // TODO: Zatrzymanie aktywności w grze
-        isPaused = true;
-
         Debug.Log("Game paused");
-        playerController.SetPaused(true);
+        playerController.SetPlayerCanMove(false);
     }
 
     private void ResumeGame() {
-        Time.timeScale = 1f;
-
-        // TODO: Wznowienie aktywności w grze
-        isPaused = false;
-
+        if (!isMenuOpen)
+            Time.timeScale = 1f;
+        
         Debug.Log("Game resumed");
-        playerController.SetPaused(false);
+        playerController.SetPlayerCanMove(true);
+    }
+
+    public void SetLootBoxOpen(bool isOpen) {
+        isLootBoxOpen = isOpen;
+
+        if (!isOpen)
+            canPressEscape = false;
+    }
+
+    public void hideLootBox() {
+        isLootBoxOpen = false;
+        lootSystem.ShowLootBoxUI(isLootBoxOpen);
     }
 }

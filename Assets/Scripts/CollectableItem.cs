@@ -25,6 +25,7 @@ public class CollectableItem : MonoBehaviour
     }
 
 
+    // TODO: Player interract first with the nearest object
     void Update(){
         if (Input.GetKeyDown(KeyCode.E)){
             Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
