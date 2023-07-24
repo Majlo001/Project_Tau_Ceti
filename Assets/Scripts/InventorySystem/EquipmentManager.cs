@@ -13,7 +13,8 @@ public class EquipmentManager : MonoBehaviour {
     public GameObject chestplateSlot;
     public GameObject bootsSlot;
 
-    public int equipmentSlotCount = 4;
+    private int consumablesSlotCount;
+    private int equipmentSlotCount;
     public GameObject[] consumableSlots = new GameObject[4];
     public CustomItem[] equippedConsumables = new CustomItem[4];
 
@@ -39,6 +40,9 @@ public class EquipmentManager : MonoBehaviour {
         slotObjects.Add("Helmet", helmetSlot);
         slotObjects.Add("Chestplate", chestplateSlot);
         slotObjects.Add("Boots", bootsSlot);
+
+        consumablesSlotCount = consumableSlots.Length;
+        equipmentSlotCount = equippedItems.Count;
     }
 
     public void EquipItem(CustomItem item, string slotType) {
@@ -95,11 +99,34 @@ public class EquipmentManager : MonoBehaviour {
     }
 
 
+    public void PrintEquipment() {
+        string temp = "";
+        string temptext;
+
+        foreach (KeyValuePair<string, CustomItem> equippedItem in equippedItems) {
+            
+            temptext = "null";
+            if (slotObjects.TryGetValue(equippedItem.Key, out GameObject slot)) {
+                if (slot.GetComponent<EquipmentSlot>().item != null) {
+                    temptext = slot.GetComponent<EquipmentSlot>().item.item.itemName;
+                }
+            }
+                
+
+            if (equippedItem.Value != null) {
+                temp += equippedItem.Key + ": " + equippedItem.Value.item.itemName + " " + temptext +"\n";
+            } else {
+                temp += equippedItem.Key + ": " + "null" + " " + temptext +"\n";
+            }
+        }
+        Debug.Log(temp);
+    }
+
     public void PrintConsumables() {
         string temp = "";
         string temptext;
 
-        for(int i=0; i<equipmentSlotCount; i++){
+        for(int i=0; i < consumablesSlotCount; i++){
             if (consumableSlots[i].GetComponent<ConsumableSlot>().item != null) {
                 temptext = consumableSlots[i].GetComponent<ConsumableSlot>().item.item.itemName;
             } else {
@@ -117,7 +144,7 @@ public class EquipmentManager : MonoBehaviour {
     }
 
     public void UpdateEquippedConsumables() {
-        for (int i = 0; i < equipmentSlotCount; i++) {
+        for (int i = 0; i < consumablesSlotCount; i++) {
             if (equippedConsumables[i] != null) {
                 if (consumableSlots[i].transform.childCount == 0) {
                     equippedConsumables[i] = null;

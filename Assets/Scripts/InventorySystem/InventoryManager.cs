@@ -212,6 +212,7 @@ public class InventoryManager : MonoBehaviour {
         if (showAllTypes) {
             ClearInventorySlots();
             AddToInventorySlots();
+            SortItemsByLevelAndRarity();
             AddInventorySlots(inventorySlotCount - items.Count);
         } 
         else {

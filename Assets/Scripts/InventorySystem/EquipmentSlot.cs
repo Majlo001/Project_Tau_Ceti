@@ -38,6 +38,7 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
         item = draggableItem.item;
         inventoryManager.Remove(item);
         equipmentManager.EquipItem(item, slotItemType);
+        equipmentManager.PrintEquipment();
     }
 
     public void RemoveItem() {
