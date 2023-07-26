@@ -13,17 +13,17 @@ public class Tooltip : MonoBehaviour {
 
     //TODO: levelField
 
+    private Canvas canvas;
 
     public LayoutElement layoutElement;
 
     public int characterWrapLimit;
 
     public RectTransform rectTransform;
-    private CanvasScaler canvasScaler;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
-        canvasScaler = transform.GetComponent<CanvasScaler>();
+        canvas = GetComponentInParent<Canvas>();
     }
 
     public void SetText(string header, string rarity, string content, string stats) {
@@ -63,20 +63,17 @@ public class Tooltip : MonoBehaviour {
     }
 
     public void SetPosition (Vector3 position, Transform slotTransform) {
-        // float scaleX = canvasScaler.scaleFactor.x;
-        // float scaleY = canvasScaler.scaleFactor.y;
-        // Debug.Log("Skala canvasa X: " + scaleX);
-        // Debug.Log("Skala canvasa Y: " + scaleY);
+        float slotWidth = 46.5f * canvas.scaleFactor;
+        float slotHeight = 46.5f * canvas.scaleFactor;
+        // float slotHeight = slotTransform.GetComponent<RectTransform>().rect.height * canvas.scaleFactor;
+        Debug.Log("slotWidth: " + slotWidth + " slotHeight: " + slotHeight);
 
+        float tooltipWidth = layoutElement.transform.GetComponent<RectTransform>().rect.width * canvas.scaleFactor;
+        float tooltipHeight = layoutElement.transform.GetComponent<RectTransform>().rect.height * canvas.scaleFactor;
 
-        float slotWidth = slotTransform.GetComponent<RectTransform>().rect.width;
-        float slotHeight = slotTransform.GetComponent<RectTransform>().rect.height;
-
-        float tooltipWidth = layoutElement.transform.GetComponent<RectTransform>().rect.width;
-        float tooltipHeight = layoutElement.transform.GetComponent<RectTransform>().rect.height;
-
-        Vector3 slotPosition = position - new Vector3(0f, (tooltipHeight/2f + slotHeight/2f), 0f);
-        Debug.Log("Position: " + slotPosition + " tooltipWidth: " + tooltipWidth + " tooltipHeight: " + tooltipHeight);
+        // Vector3 slotPosition = position - new Vector3(0f, (tooltipHeight/2f + slotHeight/2f), 0f);
+        Vector3 slotPosition = position - new Vector3(-tooltipWidth/2f + slotWidth, tooltipHeight/2f + slotHeight, 0f);
+        // Debug.Log("Position: " + position + " tooltipWidth: " + tooltipWidth + " tooltipHeight: " + tooltipHeight);
 
         
         transform.position = slotPosition;

@@ -15,9 +15,6 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private Coroutine tooltipCoroutine;
 
 
-    public float v1 = 0f;
-    public float v2 = 0f;
-
     public void Start() {
         draggableItem = GetComponent<DraggableItem>();
         header = draggableItem.item.item.itemName;
