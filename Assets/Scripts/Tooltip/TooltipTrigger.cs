@@ -14,6 +14,10 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private bool isPointerOver;
     private Coroutine tooltipCoroutine;
 
+
+    public float v1 = 0f;
+    public float v2 = 0f;
+
     public void Start() {
         draggableItem = GetComponent<DraggableItem>();
         header = draggableItem.item.item.itemName;
@@ -23,8 +27,12 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
+        Transform slotTransform = draggableItem.transform.parent;
+        Vector3 slotPosition = draggableItem.transform.parent.position;
+
         isPointerOver = true;
-        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(0.5f));
+        TooltipSystem.SetTootip(header, rarity, content, stats, slotPosition, slotTransform);
+        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(1f));
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -49,7 +57,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
 
         if (isPointerOver) {
-            TooltipSystem.Show(header, rarity, content, stats);
+            TooltipSystem.Show();
         }
     }
 }

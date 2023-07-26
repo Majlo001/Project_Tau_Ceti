@@ -2726,7 +2726,7 @@ GameObject:
   - component: {fileID: 640301270}
   - component: {fileID: 640301269}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2858,7 +2858,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -660, y: 500}
+  m_AnchoredPosition: {x: -660, y: 454}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &667066214
@@ -3427,9 +3427,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -36, y: 970}
+  m_AnchoredPosition: {x: -51.24649, y: 831.76587}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5304929, y: 1.0779221}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &859355465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5355,7 +5355,7 @@ MonoBehaviour:
   inventorySlot: {fileID: 7393199408130559755, guid: 2d8d1ef2224a9a944b4fdc1b37a22bb8, type: 3}
   inventoryItem: {fileID: 2906808963488987687, guid: d1d62e5e99f2f3e4ea4931e19cda4ad7, type: 3}
   inventoryUI: {fileID: 212085567}
-  inventorySlotCount: 5
+  inventorySlotCount: 50
 --- !u!4 &1185162941
 Transform:
   m_ObjectHideFlags: 0

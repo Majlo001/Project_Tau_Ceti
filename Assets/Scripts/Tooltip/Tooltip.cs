@@ -19,9 +19,11 @@ public class Tooltip : MonoBehaviour {
     public int characterWrapLimit;
 
     public RectTransform rectTransform;
+    private CanvasScaler canvasScaler;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        canvasScaler = transform.GetComponent<CanvasScaler>();
     }
 
     public void SetText(string header, string rarity, string content, string stats) {
@@ -60,24 +62,52 @@ public class Tooltip : MonoBehaviour {
         }
     }
 
+    public void SetPosition (Vector3 position, Transform slotTransform) {
+        // float scaleX = canvasScaler.scaleFactor.x;
+        // float scaleY = canvasScaler.scaleFactor.y;
+        // Debug.Log("Skala canvasa X: " + scaleX);
+        // Debug.Log("Skala canvasa Y: " + scaleY);
+
+
+        float slotWidth = slotTransform.GetComponent<RectTransform>().rect.width;
+        float slotHeight = slotTransform.GetComponent<RectTransform>().rect.height;
+
+        float tooltipWidth = layoutElement.transform.GetComponent<RectTransform>().rect.width;
+        float tooltipHeight = layoutElement.transform.GetComponent<RectTransform>().rect.height;
+
+        Vector3 slotPosition = position - new Vector3(0f, (tooltipHeight/2f + slotHeight/2f), 0f);
+        Debug.Log("Position: " + slotPosition + " tooltipWidth: " + tooltipWidth + " tooltipHeight: " + tooltipHeight);
+
+        
+        transform.position = slotPosition;
+    }
+
     private void Update() {
-        if (Application.isEditor) {
-            int headerLength = headerField.text.Length;
-            int contentLength = contentField.text.Length;
+        // if (Application.isEditor) {
+        //     int headerLength = headerField.text.Length;
+        //     int contentLength = contentField.text.Length;
 
-            layoutElement.enabled = (headerLength > characterWrapLimit || contentLength > characterWrapLimit);
-        }
+        //     layoutElement.enabled = (headerLength > characterWrapLimit || contentLength > characterWrapLimit);
+        // }
 
-        Vector3 mousePosition = Input.mousePosition;
-        Vector3 tooltipPosition = mousePosition + new Vector3(30f, -10f, 0f); // Przesunięcie tooltipu względem kursora
+        // Vector3 mousePosition = Input.mousePosition;
+        // Vector3 tooltipPosition = mousePosition + new Vector3(10f, 0f, 0f);
 
-        // Sprawdź, czy tooltip znajduje się na prawej stronie ekranu
-        if (tooltipPosition.x + rectTransform.rect.width > Screen.width)
-        {
-            tooltipPosition -= new Vector3(rectTransform.rect.width + 60f, 0f, 0f); // Przesunięcie tooltipu na lewo
-        }
+        // float tooltipWidth = rectTransform.rect.width;
+        // float tooltipHeight = rectTransform.rect.height;
 
-        rectTransform.position = tooltipPosition;
+        // float windowWidth = Screen.width;
+        // float windowHeight = Screen.height;
+
+
+        // Debug.Log("windowHeight: " + windowHeight + " widnowWidth: " + windowWidth);
+        // Debug.Log("tooltipPosition.x: " + tooltipPosition.x + " tooltipPosition.y: " + tooltipPosition.y);
+        // if (tooltipPosition.y - tooltipHeight < 0) {
+        //     Debug.Log("DOWN");
+        //     tooltipPosition.y = mousePosition.y + tooltipHeight - 10f;
+        // }
+
+        // rectTransform.position = tooltipPosition;
     }
 
 }

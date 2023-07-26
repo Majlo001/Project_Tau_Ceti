@@ -12,8 +12,12 @@ public class TooltipSystem : MonoBehaviour {
         Hide();
     }
 
-    public static void Show(string header, string rarity, string content, string stats) {
+    public static void SetTootip(string header, string rarity, string content, string stats, Vector3 slotPosition, Transform slotTransform) {
         current.tooltip.SetText(header, rarity, content, stats);
+        current.tooltip.SetPosition(slotPosition, slotTransform);
+    }
+
+    public static void Show() {
         current.tooltip.gameObject.SetActive(true);
     }
     public static void Hide() {
