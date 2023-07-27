@@ -13,7 +13,7 @@ public class TooltipSystem : MonoBehaviour {
     }
 
     public static void SetTootip(string header, string rarity, string content, string stats, Vector3 slotPosition, Transform slotTransform) {
-        current.tooltip.SetText(header, rarity, content, stats);
+        current.tooltip.SetText(header, rarity, content, stats, slotPosition, slotTransform);
         current.tooltip.SetPosition(slotPosition, slotTransform);
     }
 
