@@ -27,9 +27,9 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Transform slotTransform = draggableItem.transform.parent;
         Vector3 slotPosition = draggableItem.transform.parent.position;
 
-        isPointerOver = true;
-        TooltipSystem.SetTootip(header, rarity, content, stats, slotPosition, slotTransform);
-        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(1f));
+        // isPointerOver = true;
+        // TooltipSystem.SetTootip(header, rarity, content, stats, slotPosition, slotTransform);
+        // tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(1f));
     }
 
     public void OnPointerExit(PointerEventData eventData) {

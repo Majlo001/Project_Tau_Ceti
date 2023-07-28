@@ -24,6 +24,10 @@ public class Tooltip : MonoBehaviour {
 
     public RectTransform rectTransform;
 
+    private bool isOpened;
+    private bool canBeOpened;
+
+
 
 
 
