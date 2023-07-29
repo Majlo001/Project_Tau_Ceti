@@ -12,11 +12,14 @@ public class NewTooltip : MonoBehaviour{
     //TODO: levelField
 
 
-    private RectTransform rectTransform;
+    public RectTransform rectTransform;
     private Canvas canvas;
+    private bool isTooltipOpen = false;
+    private bool isChanged = false;
+    public float tootlipOffset = 2000f;
+
 
     private void Start() {
-        rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
     }
 
@@ -56,5 +59,32 @@ public class NewTooltip : MonoBehaviour{
 
     public void ShowTooltip(bool show) {
         gameObject.SetActive(show);
+        isTooltipOpen = show;
+    }
+
+    private void LateUpdate() {
+        if (isTooltipOpen && !isChanged) {
+            float tooltipHeight = rectTransform.sizeDelta.y;
+            float tooltipWidth = rectTransform.sizeDelta.x;
+
+            if (tooltipHeight != 0) {
+                Vector3 position = rectTransform.localPosition;
+                position.y -= tootlipOffset;
+
+                Vector3 globalPosition = transform.parent.TransformPoint(position) * canvas.scaleFactor;
+                // Debug.Log("Global position: " + globalPosition);
+
+                if (globalPosition.y - (tooltipHeight/2f) < 0) {
+                    position.y += Mathf.Floor(tooltipHeight + 161f);
+                }
+
+                if (tooltipWidth != 0 && (globalPosition.x - (tooltipWidth / 2f) > Screen.width)) {
+                    position.x -= Mathf.Floor(tooltipWidth - 160f);
+                }
+
+                rectTransform.localPosition = position;
+                isChanged = true;
+            }   
+        }
     }
 }

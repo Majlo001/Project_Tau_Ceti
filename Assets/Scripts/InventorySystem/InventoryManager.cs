@@ -90,6 +90,10 @@ public class InventoryManager : MonoBehaviour {
 
             CustomItem newCustomItem = new CustomItem(item, count);
             items.Add(newCustomItem);
+            // items.Add(newCustomItem);
+            // items.Add(newCustomItem);
+            // items.Add(newCustomItem);
+            // items.Add(newCustomItem);
         }
         return true;
     }
@@ -115,6 +119,10 @@ public class InventoryManager : MonoBehaviour {
             }
 
             items.Add(item);
+            // items.Add(item);
+            // items.Add(item);
+            // items.Add(item);
+            // items.Add(item);
         }
         return true;
     }
