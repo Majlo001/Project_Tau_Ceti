@@ -12,18 +12,28 @@ public class NewTooltip : MonoBehaviour{
     //TODO: levelField
 
 
+    private CustomItem customItem;
     public RectTransform rectTransform;
     private Canvas canvas;
     private bool isTooltipOpen = false;
     private bool isChanged = false;
-    public float tootlipOffset = 2000f;
+    public float tooltipOffset = 5000f;
+
+    private float tooltipHeight;
+    private float tooltipWidth;
 
 
     private void Start() {
-        canvas = GetComponentInParent<Canvas>();
+        canvas = GameObject.Find("Overlay").GetComponent<Canvas>();
     }
 
-    public void SetText(string header, string rarity, string content, string stats) {
+    public void SetText(CustomItem item) {
+        string header = item.item.itemName;
+        string rarity = item.item.GetTooltipRarity();
+        string content = item.item.itemDescription;
+        string stats = item.item.GetTooltipStats();
+        customItem = item;
+
         if (string.IsNullOrEmpty(header)) {
             headerField.gameObject.SetActive(false);
         }
@@ -55,35 +65,54 @@ public class NewTooltip : MonoBehaviour{
             statsField.gameObject.SetActive(true);
             statsField.text = stats;
         }
+        isChanged = false;
     }
 
-    public void ShowTooltip(bool show) {
-        gameObject.SetActive(show);
+    public void ShowTooltip(bool show, bool isFirstTime = false) {
         isTooltipOpen = show;
+
+        if (!show && !isFirstTime) {
+            refeshPosition();
+        }
+        gameObject.SetActive(show);
     }
 
-    private void LateUpdate() {
+    public void refeshPosition() {
+        Debug.Log("Refresh position");
+        Vector3 position = rectTransform.localPosition;
+
+        position.y = tooltipOffset - 80f;
+        rectTransform.localPosition = position;
+        isChanged = false;
+    }
+
+    private void Update() {
         if (isTooltipOpen && !isChanged) {
-            float tooltipHeight = rectTransform.sizeDelta.y;
-            float tooltipWidth = rectTransform.sizeDelta.x;
+            tooltipHeight = rectTransform.sizeDelta.y;
+            tooltipWidth = rectTransform.sizeDelta.x;
 
             if (tooltipHeight != 0) {
                 Vector3 position = rectTransform.localPosition;
-                position.y -= tootlipOffset;
+                position.y -= tooltipOffset;
+                rectTransform.localPosition = position;
 
-                Vector3 globalPosition = transform.parent.TransformPoint(position) * canvas.scaleFactor;
-                // Debug.Log("Global position: " + globalPosition);
 
-                if (globalPosition.y - (tooltipHeight/2f) < 0) {
+                Vector2 tooltipPositionGlobal = rectTransform.TransformPoint(rectTransform.rect.position);
+                // Debug.Log("Tooltip Position: " + tooltipPositionGlobal + " tooltipHeight/2: " + tooltipHeight/2 + " dol: " + tooltipPositionGlobal.y);
+                // Debug.Log("Mouse Position: " + Input.mousePosition + " obliczone: " + (tooltipPositionGlobal.y - Input.mousePosition.y));
+
+                if (tooltipPositionGlobal.y < 0) {
                     position.y += Mathf.Floor(tooltipHeight + 161f);
                 }
 
-                if (tooltipWidth != 0 && (globalPosition.x - (tooltipWidth / 2f) > Screen.width)) {
+                if (tooltipWidth != 0 && (tooltipPositionGlobal.x - tooltipWidth > Screen.width)) {
                     position.x -= Mathf.Floor(tooltipWidth - 160f);
                 }
 
                 rectTransform.localPosition = position;
                 isChanged = true;
+
+                Debug.Log("Tooltip: " + headerField.text + " Position: " + tooltipPositionGlobal.y + " tooltipHeight: " + tooltipHeight + " ");
             }   
         }
     }

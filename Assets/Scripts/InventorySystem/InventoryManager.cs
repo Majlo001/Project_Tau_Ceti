@@ -90,10 +90,10 @@ public class InventoryManager : MonoBehaviour {
 
             CustomItem newCustomItem = new CustomItem(item, count);
             items.Add(newCustomItem);
-            // items.Add(newCustomItem);
-            // items.Add(newCustomItem);
-            // items.Add(newCustomItem);
-            // items.Add(newCustomItem);
+            items.Add(newCustomItem);
+            items.Add(newCustomItem);
+            items.Add(newCustomItem);
+            items.Add(newCustomItem);
         }
         return true;
     }
@@ -119,10 +119,10 @@ public class InventoryManager : MonoBehaviour {
             }
 
             items.Add(item);
-            // items.Add(item);
-            // items.Add(item);
-            // items.Add(item);
-            // items.Add(item);
+            items.Add(item);
+            items.Add(item);
+            items.Add(item);
+            items.Add(item);
         }
         return true;
     }
@@ -184,7 +184,7 @@ public class InventoryManager : MonoBehaviour {
 
 
             NewTooltip newTooltip = slot.transform.Find("InventoryTooltip").GetComponent<NewTooltip>();
-            newTooltip.SetText(customItem.item.itemName, customItem.item.GetTooltipRarity(), customItem.item.itemDescription, customItem.item.GetTooltipStats());
+            newTooltip.SetText(customItem);
 
 
             //TODO: Change outline to image or sth.

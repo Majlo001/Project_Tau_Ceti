@@ -14,19 +14,21 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (transform.childCount > 0) {
             childTransform = transform.GetChild(0);
         }
-        HideTooltip();
+        HideTooltip(true);
     }
 
     private void Update() {
-        if (childTransform == null || transform.childCount == 0) {
-            HideTooltip();
+        if (transform.childCount == 0) {
+            HideTooltip(true);
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        isMouseOver = true;
-        ShowTooltipDelayed(delay);
-        tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(delay));
+        if (transform.childCount > 0) {
+            isMouseOver = true;
+            ShowTooltipDelayed(delay);
+            tooltipCoroutine = StartCoroutine(ShowTooltipDelayed(delay));
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -41,8 +43,8 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         tooltip.GetComponent<NewTooltip>().ShowTooltip(true);
     }
 
-    private void HideTooltip() {
-        tooltip.GetComponent<NewTooltip>().ShowTooltip(false);
+    private void HideTooltip(bool isFirstTime = false) {
+        tooltip.GetComponent<NewTooltip>().ShowTooltip(false, isFirstTime);
     }
 
     private IEnumerator ShowTooltipDelayed(float delay) {

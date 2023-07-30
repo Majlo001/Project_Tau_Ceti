@@ -11,11 +11,12 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
     private InventoryManager inventoryManager;
     private EquipmentManager equipmentManager;
     public CustomItem item;
+    private NewTooltip newTooltip;
     
     void Start() {
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
         equipmentManager = GameObject.Find("InventoryManager").GetComponent<EquipmentManager>();
-        // slotItemType = "Consumable";
+        newTooltip = transform.parent.transform.Find("ConsumableTooltip").GetComponent<NewTooltip>();
     }
 
     //TODO: Double click to use item.
@@ -52,6 +53,7 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
 
             GameObject childObject = transform.GetChild(0).gameObject;
             childObject.transform.SetParent(parentObject.transform);
+            parentObject.transform.GetComponent<ConsumableSlot>().ChangeTooltip(childObject.GetComponent<DraggableItem>());
         }
         else if (transform.childCount > 0 && item != null) {
             bool canBeReturned = inventoryManager.ReturnToInventory(item, true);
@@ -66,6 +68,13 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
         item = draggableItem.item;
         inventoryManager.Remove(item);
         equipmentManager.EquipConsumable(item, slotNumber);
+        ChangeTooltip(draggableItem);
+    }
+
+    public void ChangeTooltip(DraggableItem draggableItem) {
+        Debug.Log("ChangeTooltip");
+        newTooltip.SetText(draggableItem.item);
+        // newTooltip.ShowTooltip(false);
     }
 
     public void RemoveItem() {

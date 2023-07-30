@@ -107,8 +107,8 @@ public class EquipmentManager : MonoBehaviour {
             
             temptext = "null";
             if (slotObjects.TryGetValue(equippedItem.Key, out GameObject slot)) {
-                if (slot.GetComponent<EquipmentSlot>().item != null) {
-                    temptext = slot.GetComponent<EquipmentSlot>().item.item.itemName;
+                if (slot.transform.GetChild(0).GetComponent<EquipmentSlot>().item != null) {
+                    temptext = slot.transform.GetChild(0).GetComponent<EquipmentSlot>().item.item.itemName;
                 }
             }
                 
@@ -127,8 +127,8 @@ public class EquipmentManager : MonoBehaviour {
         string temptext;
 
         for(int i=0; i < consumablesSlotCount; i++){
-            if (consumableSlots[i].GetComponent<ConsumableSlot>().item != null) {
-                temptext = consumableSlots[i].GetComponent<ConsumableSlot>().item.item.itemName;
+            if (consumableSlots[i].transform.GetChild(0).GetComponent<ConsumableSlot>().item != null) {
+                temptext = consumableSlots[i].transform.GetChild(0).GetComponent<ConsumableSlot>().item.item.itemName;
             } else {
                 temptext = "null";
             }

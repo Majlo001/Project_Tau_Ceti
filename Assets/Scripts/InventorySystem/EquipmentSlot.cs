@@ -9,10 +9,12 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
     private InventoryManager inventoryManager;
     private EquipmentManager equipmentManager;
     public CustomItem item;
+    private NewTooltip newTooltip;
     
     void Start() {
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
         equipmentManager = GameObject.Find("InventoryManager").GetComponent<EquipmentManager>();
+        newTooltip = transform.parent.transform.Find("EquipmentTooltip").GetComponent<NewTooltip>();
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -28,17 +30,17 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
         if (transform.childCount > 0 && item != null) {
             bool canBeReturned = inventoryManager.ReturnToInventory(item, true);
 
-            // if (canBeReturned) {
             Transform childTransform = transform.GetChild(0);
             GameObject childObject = childTransform.gameObject;
             Destroy(childObject);
-            // }
         }
         draggableItem.parentAfterDrag = transform;
         item = draggableItem.item;
         inventoryManager.Remove(item);
         equipmentManager.EquipItem(item, slotItemType);
         equipmentManager.PrintEquipment();
+
+        newTooltip.SetText(draggableItem.item);
     }
 
     public void RemoveItem() {
