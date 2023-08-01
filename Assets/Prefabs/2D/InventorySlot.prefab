@@ -326,7 +326,7 @@ MonoBehaviour:
   statsField: {fileID: 2748842580066327063}
   levelField: {fileID: 1198659774094736451}
   valueField: {fileID: 4181797042982138207}
-  statsPanel: {fileID: 2141525369568123315}
+  statsPanel: {fileID: 1070349192793869350}
   statsPrefab: {fileID: 9084017640383940977, guid: a94712304f0852e4ca42089c7b97522a, type: 3}
   rectTransform: {fileID: 3069881463259135196}
   tooltipOffset: 5000
