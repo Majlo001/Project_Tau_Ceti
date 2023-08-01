@@ -25,5 +25,13 @@ MonoBehaviour:
   itemValue: 2000
   itemRarity: 5
   itemIcon: {fileID: 21300000, guid: 4705bc470fb340142ab7117e42d53dfe, type: 3}
-  damage: 100
-  fireDamage: 10
+  damageRange: 780000002c010000
+  itemStats:
+    fireDamage: 12
+    posionDamage: 32
+    iceDamage: 50
+    lightningDamage: 0
+    crushingDamage: 23
+    attackSpeed: 0.12
+    critChance: 35
+    critDamage: 0

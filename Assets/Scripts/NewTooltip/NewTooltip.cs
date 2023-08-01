@@ -9,7 +9,10 @@ public class NewTooltip : MonoBehaviour{
     public Text contentField;
     public Text statsField;
 
-    //TODO: levelField
+    public Text levelField;
+    public Text valueField;
+    public Transform statsPanel;
+    public GameObject statsPrefab;
 
 
     private CustomItem customItem;
@@ -27,9 +30,9 @@ public class NewTooltip : MonoBehaviour{
         canvas = GameObject.Find("Overlay").GetComponent<Canvas>();
     }
 
-    public void SetText(CustomItem item) {
+    public void SetTooltipItem(CustomItem item) {
         string header = item.item.itemName;
-        string rarity = item.item.GetTooltipRarity();
+        string rarity = item.item.GetTooltipRarityText();
         string content = item.item.itemDescription;
         string stats = item.item.GetTooltipStats();
         customItem = item;
@@ -65,8 +68,43 @@ public class NewTooltip : MonoBehaviour{
             statsField.gameObject.SetActive(true);
             statsField.text = stats;
         }
+        
+        if (statsPrefab != null) {
+            SetStats(item);
+        }
         isChanged = false;
     }
+
+    public void SetStats(CustomItem item) {
+        Stats itemStats = item.GetStats();
+        if (itemStats == null) {
+            Debug.Log("itemStats is null");
+            return;
+        }
+
+        Debug.Log("itemType: " + item.item.itemType);
+        StatsData[] statsData = itemStats.GetStatsFields();
+
+
+        if (statsData != null) {
+            foreach (StatsData stat in statsData) {
+                GameObject statObject = Instantiate(statsPrefab, statsPanel);
+
+                Text statName = statObject.transform.Find("StatName").GetComponent<Text>();
+                Text statValue = statObject.transform.Find("StatValue").GetComponent<Text>();
+                Text statChange = statObject.transform.Find("StatChange").GetComponent<Text>();
+
+                statName.text = stat.statName;
+                statValue.text = stat.statValue.ToString() + "%";
+            }
+        }
+        else {
+            Debug.Log("StatsData is null");
+        }
+       
+
+    }
+
 
     public void ShowTooltip(bool show, bool isFirstTime = false) {
         isTooltipOpen = show;

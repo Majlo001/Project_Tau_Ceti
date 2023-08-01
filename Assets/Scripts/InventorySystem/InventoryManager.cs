@@ -10,8 +10,11 @@ public class CustomItemComparer : IComparer<CustomItem> {
         if (x.item.itemLevel != y.item.itemLevel) {
             return y.item.itemLevel.CompareTo(x.item.itemLevel);
         }
-        else {
+        else if (x.item.itemRarity != y.item.itemRarity) {
             return y.item.itemRarity.CompareTo(x.item.itemRarity);
+        }
+        else {
+            return x.item.itemName.CompareTo(y.item.itemName);
         }
     }
 }
@@ -22,6 +25,15 @@ public class CustomItem {
     public int itemCount;
     public int itemLevel;
     public bool isUpgraded;
+    public Stats itemUpgradedStats;
+
+    public Stats GetStats() {
+        if (item is Weapon) {
+            return ((Weapon)item).itemStats;
+        }
+
+        return null;
+    }
 
     public CustomItem(Item item, int count, int level = 0) {
         this.item = item;
@@ -184,7 +196,7 @@ public class InventoryManager : MonoBehaviour {
 
 
             NewTooltip newTooltip = slot.transform.Find("InventoryTooltip").GetComponent<NewTooltip>();
-            newTooltip.SetText(customItem);
+            newTooltip.SetTooltipItem(customItem);
 
 
             //TODO: Change outline to image or sth.
@@ -223,8 +235,8 @@ public class InventoryManager : MonoBehaviour {
     private void RefreshInventory() {
         if (showAllTypes) {
             ClearInventorySlots();
-            AddToInventorySlots();
             SortItemsByLevelAndRarity();
+            AddToInventorySlots();
             AddInventorySlots(inventorySlotCount - items.Count);
         } 
         else {

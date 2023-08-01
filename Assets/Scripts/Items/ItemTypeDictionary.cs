@@ -25,6 +25,11 @@ public class ItemTypeDictionary : MonoBehaviour {
     public Dictionary<string, int> itemTypeReverse;
 
 
+    public Dictionary<string, string> weaponStatsDictionary;
+
+
+
+
     public int[] itemTypeWeapons = new int[] { 0 };
     public int[] itemTypeShields = new int[] { 5 };
     public int[] itemTypeArmour = new int[] { 1, 2, 3, 4 };
@@ -42,10 +47,24 @@ public class ItemTypeDictionary : MonoBehaviour {
         instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        InitializeDictionary();
+        InitDictionary();
+        InitWeaponStatsDictionary();
     }
 
-    private void InitializeDictionary() {
+    private void InitWeaponStatsDictionary(){
+        weaponStatsDictionary = new Dictionary<string, string>();
+
+        weaponStatsDictionary.Add("fireDamage", "Fire Damage");
+        weaponStatsDictionary.Add("posionDamage", "Posion Damage");
+        weaponStatsDictionary.Add("iceDamage", "Ice Damage");
+        weaponStatsDictionary.Add("lightningDamage", "Lightning Damage");
+        weaponStatsDictionary.Add("crushingDamage", "Crushing Damage");
+        weaponStatsDictionary.Add("attackSpeed", "Attack Speed");
+        weaponStatsDictionary.Add("critChance", "Critic Chance");
+        weaponStatsDictionary.Add("critDamage", "Critic Damage");
+    }
+
+    private void InitDictionary() {
         itemType = new Dictionary<int, string>();
         itemTypeReverse = new Dictionary<string, int>();
 

@@ -73,7 +73,7 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
 
     public void ChangeTooltip(DraggableItem draggableItem) {
         Debug.Log("ChangeTooltip");
-        newTooltip.SetText(draggableItem.item);
+        newTooltip.SetTooltipItem(draggableItem.item);
         // newTooltip.ShowTooltip(false);
     }
 

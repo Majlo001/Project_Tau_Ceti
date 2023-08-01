@@ -19,7 +19,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         draggableItem = GetComponent<DraggableItem>();
         header = draggableItem.item.item.itemName;
         content = draggableItem.item.item.itemDescription;
-        rarity = draggableItem.item.item.GetTooltipRarity();
+        rarity = draggableItem.item.item.GetTooltipRarityText();
         stats = draggableItem.item.item.GetTooltipStats();
     }
 
