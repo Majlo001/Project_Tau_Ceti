@@ -21,6 +21,10 @@ public class Weapon : Item {
 
         return text;
     }
+
+    public override string TakeRangeText() {
+        return $"Damage: {damageRange[0]} - {damageRange[1]}";
+    }
 }
 
 
@@ -39,7 +43,6 @@ public class WeaponStats : Stats{
     public override StatsData[] GetStatsFields() {
         StatsData[] baseStats = base.GetStatsFields();
         
-        Debug.Log("StatsData");
         Type type = this.GetType();
         FieldInfo[] fields = type.GetFields();
 
@@ -49,12 +52,11 @@ public class WeaponStats : Stats{
         foreach (var field in fields) {
             string fieldName = field.Name;
             object fieldValue = field.GetValue(this);
-            Debug.Log("fieldName: " + fieldName + " fieldValue: " + fieldValue);
 
             if (fieldValue != null) {
                 if ((fieldValue is int intValue && intValue > 0) || (fieldValue is float floatValue && floatValue > 0f)) {
                     string statName = ItemTypeDictionary.Instance.weaponStatsDictionary[fieldName];
-                    statsTab[it] = new StatsData(statName, fieldName, fieldValue);
+                    statsTab[it] = new StatsData(fieldName, statName, fieldValue);
                     it++;
                 }
             }

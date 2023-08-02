@@ -57,6 +57,10 @@ public class EquipmentManager : MonoBehaviour {
         equippedItems[slotType] = null;
     }
 
+    public CustomItem takeItem(string slotType) {
+        return equippedItems[slotType];
+    }
+
     
     public void EquipConsumable(CustomItem item, int slotNumber) {
         if (equippedConsumables[slotNumber] != null) {

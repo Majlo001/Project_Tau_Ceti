@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class NewTooltip : MonoBehaviour{
     public Text headerField;
@@ -10,6 +11,7 @@ public class NewTooltip : MonoBehaviour{
     public Text statsField;
 
     public Text levelField;
+    public Text RangeField;
     public Text valueField;
     public Transform statsPanel;
     public GameObject statsPrefab;
@@ -25,6 +27,8 @@ public class NewTooltip : MonoBehaviour{
     private float tooltipHeight;
     private float tooltipWidth;
 
+    private EquipmentManager equipmentManager;
+
 
     private void Start() {
         canvas = GameObject.Find("Overlay").GetComponent<Canvas>();
@@ -34,8 +38,13 @@ public class NewTooltip : MonoBehaviour{
         string header = item.item.itemName;
         string rarity = item.item.GetTooltipRarityText();
         string content = item.item.itemDescription;
+
+        //TODO: change when upgraded items will be implemented
         string stats = item.item.GetTooltipStats();
+        string value = item.item.GetItemVaule().ToString();
+        string level = item.item.itemLevel.ToString();
         customItem = item;
+
 
         if (string.IsNullOrEmpty(header)) {
             headerField.gameObject.SetActive(false);
@@ -61,13 +70,30 @@ public class NewTooltip : MonoBehaviour{
             contentField.text = content;
         }
 
-        if (string.IsNullOrEmpty(stats)) {
-            statsField.gameObject.SetActive(false);
+        if (string.IsNullOrEmpty(level)) {
+            levelField.gameObject.SetActive(false);
         }
         else {
-            statsField.gameObject.SetActive(true);
-            statsField.text = stats;
+            levelField.gameObject.SetActive(true);
+            levelField.text = "Level: " + level;
         }
+
+        if (string.IsNullOrEmpty(value)) {
+            valueField.gameObject.SetActive(false);
+        }
+        else {
+            valueField.gameObject.SetActive(true);
+            valueField.text = "Value: " + value;
+        }
+
+        // if (string.IsNullOrEmpty(stats)) {
+        //     statsField.gameObject.SetActive(false);
+        // }
+        // else {
+        //     statsField.gameObject.SetActive(true);
+        //     statsField.text = stats;
+        // }
+        statsField.gameObject.SetActive(false);
         
         if (statsPrefab != null) {
             SetStats(item);
@@ -81,9 +107,8 @@ public class NewTooltip : MonoBehaviour{
             Debug.Log("itemStats is null");
             return;
         }
-
-        Debug.Log("itemType: " + item.item.itemType);
         StatsData[] statsData = itemStats.GetStatsFields();
+        string itemTypeString = ItemTypeDictionary.Instance.itemType[item.item.itemType];
 
 
         if (statsData != null) {
@@ -95,14 +120,31 @@ public class NewTooltip : MonoBehaviour{
                 Text statChange = statObject.transform.Find("StatChange").GetComponent<Text>();
 
                 statName.text = stat.statName;
-                statValue.text = stat.statValue.ToString() + "%";
+                statValue.text = stat.statValue.ToString();
+                
+                if (stat.statValue is int)
+                    statValue.text += "%";
+
+                Debug.Log("itemTypeString: " + itemTypeString);
+                CustomItem slotItem = equipmentManager.takeItem(itemTypeString);
+
+                if (slotItem != null) {
+                    Stats slotItemStats = slotItem.GetStats();
+                    if (slotItemStats == null) {
+                        Debug.Log("slotItemStats is null");
+                        return;
+                    }
+                    StatsData[] slotStatsData = slotItemStats.GetStatsFields();
+
+                }
+
             }
         }
         else {
             Debug.Log("StatsData is null");
         }
-       
 
+        Array.Clear(statsData, 0, statsData.Length);
     }
 
 

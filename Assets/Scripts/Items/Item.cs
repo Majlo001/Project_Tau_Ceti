@@ -5,14 +5,21 @@ using System;
 using System.Reflection;
 
 public struct StatsData {
-    public string statName;
     public string fieldName;
+    public string statName;
     public object statValue;
 
-    public StatsData(string name, string field, object value) {
-        statName = name;
+    public StatsData(string field, string name, object value) {
         fieldName = field;
+        statName = name;
         statValue = value;
+    }
+
+    public object GetStatValue(string fieldName) {
+        if (fieldName != this.fieldName)
+            return null;
+        
+        return statValue;
     }
 }
 
@@ -36,10 +43,11 @@ public class Item : ScriptableObject {
         return text;
     }
     public string GetTooltipRarityText() {
+        string itemTypeString = ItemTypeDictionary.Instance.itemType[itemType];
         string colorHex = ItemRarityDictionary.Instance.itemColors[itemRarity];
 
         string itemRarityText = ItemRarityDictionary.Instance.itemRarity[itemRarity];
-        string text = $"<color={colorHex}>{itemRarityText}</color>";
+        string text = $"<color={colorHex}>{itemRarityText} {itemTypeString}</color>";
 
         return text;
     }
@@ -54,6 +62,10 @@ public class Item : ScriptableObject {
     
     public Stats GetStats() {
         return itemStats;
+    }
+
+    public virtual string TakeRangeText() {
+        return null;
     }
 }
 
