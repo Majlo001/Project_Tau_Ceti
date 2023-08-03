@@ -18,32 +18,43 @@ public class NewTooltip : MonoBehaviour{
 
 
     private CustomItem customItem;
+    private EquipmentManager eqManager;
+    private bool showDiff;
+
+
+
     public RectTransform rectTransform;
     private Canvas canvas;
     private bool isTooltipOpen = false;
+    private bool canMakeRefresh = false;
     private bool isChanged = false;
     public float tooltipOffset = 5000f;
 
     private float tooltipHeight;
     private float tooltipWidth;
 
-    private EquipmentManager equipmentManager;
 
 
     private void Start() {
         canvas = GameObject.Find("Overlay").GetComponent<Canvas>();
     }
 
-    public void SetTooltipItem(CustomItem item) {
+    public void SetTooltipItem(CustomItem item, EquipmentManager equipmentManager = null, bool showDifference = false) {
+        customItem = item;
+        eqManager = equipmentManager;
+        showDiff = showDifference;
+
         string header = item.item.itemName;
         string rarity = item.item.GetTooltipRarityText();
         string content = item.item.itemDescription;
 
         //TODO: change when upgraded items will be implemented
+        string range = "";
         string stats = item.item.GetTooltipStats();
         string value = item.item.GetItemVaule().ToString();
         string level = item.item.itemLevel.ToString();
-        customItem = item;
+
+        
 
 
         if (string.IsNullOrEmpty(header)) {
@@ -53,6 +64,19 @@ public class NewTooltip : MonoBehaviour{
             headerField.gameObject.SetActive(true);
             headerField.text = header;
         }
+
+
+        if (item.item.itemType == 0) {
+            range = item.item.TakeRangeText();
+        }
+        if (string.IsNullOrEmpty(range)) {
+            RangeField.gameObject.SetActive(false);
+        }
+        else {
+            RangeField.gameObject.SetActive(true);
+            RangeField.text = range;
+        }
+
 
         if (string.IsNullOrEmpty(rarity)) {
             rarityField.gameObject.SetActive(false);
@@ -96,15 +120,17 @@ public class NewTooltip : MonoBehaviour{
         statsField.gameObject.SetActive(false);
         
         if (statsPrefab != null) {
-            SetStats(item);
+            SetStats(item, equipmentManager, showDifference);
+        } else {
+            // statsPanel.gameObject.SetActive(false);
         }
         isChanged = false;
     }
 
-    public void SetStats(CustomItem item) {
+    private void SetStats(CustomItem item, EquipmentManager equipmentManager, bool showDifference = false) {
         Stats itemStats = item.GetStats();
         if (itemStats == null) {
-            Debug.Log("itemStats is null");
+            // Debug.Log("itemStats is null - item: " + item.item.itemName);
             return;
         }
         StatsData[] statsData = itemStats.GetStatsFields();
@@ -117,34 +143,72 @@ public class NewTooltip : MonoBehaviour{
 
                 Text statName = statObject.transform.Find("StatName").GetComponent<Text>();
                 Text statValue = statObject.transform.Find("StatValue").GetComponent<Text>();
-                Text statChange = statObject.transform.Find("StatChange").GetComponent<Text>();
+                Text statDifference = statObject.transform.Find("StatDifference").GetComponent<Text>();
 
                 statName.text = stat.statName;
                 statValue.text = stat.statValue.ToString();
+                statDifference.text = "";
                 
                 if (stat.statValue is int)
                     statValue.text += "%";
 
-                Debug.Log("itemTypeString: " + itemTypeString);
-                CustomItem slotItem = equipmentManager.takeItem(itemTypeString);
 
-                if (slotItem != null) {
+                if (equipmentManager != null && showDifference) {
+                    CustomItem slotItem = equipmentManager.takeItem(itemTypeString);
+                    if (slotItem == null) {
+                        statDifference.text = "+" + statValue.text;
+                        continue;
+                    }
+
                     Stats slotItemStats = slotItem.GetStats();
                     if (slotItemStats == null) {
-                        Debug.Log("slotItemStats is null");
-                        return;
+                        statDifference.text = "+" + statValue.text;
+                        continue;
                     }
+
                     StatsData[] slotStatsData = slotItemStats.GetStatsFields();
+                    
+                    if (slotStatsData != null) {
+                        foreach (StatsData slotStat in slotStatsData) {
+                            Debug.Log("We're here !");
+                            if (slotStat.fieldName != stat.fieldName)
+                                continue;
 
+                            if (slotStat.statValue is int) {
+                                int difference = (int)stat.statValue - (int)slotStat.statValue;
+                                statDifference.text = difference.ToString();
+                                if (difference > 0)
+                                    statDifference.text = "<color=green>+" + difference.ToString() + "</color>";
+                                else if (difference == 0)
+                                    statDifference.text = "It works!";
+                            }
+                            else if (slotStat.statValue is float) {
+                                float difference = (float)stat.statValue - (float)slotStat.statValue;
+                                statDifference.text = difference.ToString();
+                                if (difference > 0)
+                                    statDifference.text = "<color=green>+" + difference.ToString() + "</color>";
+                                else if (difference == 0)
+                                    statDifference.text = "It works!";
+                            }
+                            break;
+                        }
+                    }
                 }
-
             }
-        }
-        else {
-            Debug.Log("StatsData is null");
         }
 
         Array.Clear(statsData, 0, statsData.Length);
+    }
+
+    private void ClearStatsPanel() {
+        int childCount = statsPanel.transform.childCount;
+        if (childCount == 0)
+            return;
+
+        for (int i = childCount - 1; i >= 0; i--) {
+            Transform child = statsPanel.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
     }
 
 
@@ -152,18 +216,22 @@ public class NewTooltip : MonoBehaviour{
         isTooltipOpen = show;
 
         if (!show && !isFirstTime) {
-            refeshPosition();
+            RefeshPosition();
         }
         gameObject.SetActive(show);
     }
 
-    public void refeshPosition() {
-        Debug.Log("Refresh position");
+    private void RefeshPosition() {
         Vector3 position = rectTransform.localPosition;
-
         position.y = tooltipOffset - 80f;
         rectTransform.localPosition = position;
         isChanged = false;
+        canMakeRefresh = true;
+    }
+
+    private void RefreshContent() {
+        ClearStatsPanel();
+        SetTooltipItem(customItem, eqManager, showDiff);
     }
 
     private void Update() {
@@ -172,6 +240,11 @@ public class NewTooltip : MonoBehaviour{
             tooltipWidth = rectTransform.sizeDelta.x;
 
             if (tooltipHeight != 0) {
+                if (canMakeRefresh) {
+                    RefreshContent();
+                    canMakeRefresh = false;
+                }
+
                 Vector3 position = rectTransform.localPosition;
                 position.y -= tooltipOffset;
                 rectTransform.localPosition = position;
@@ -192,7 +265,7 @@ public class NewTooltip : MonoBehaviour{
                 rectTransform.localPosition = position;
                 isChanged = true;
 
-                Debug.Log("Tooltip: " + headerField.text + " Position: " + tooltipPositionGlobal.y + " tooltipHeight: " + tooltipHeight + " ");
+                // Debug.Log("Tooltip: " + headerField.text + " Position: " + tooltipPositionGlobal.y + " tooltipHeight: " + tooltipHeight + " ");
             }   
         }
     }

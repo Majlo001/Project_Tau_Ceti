@@ -40,7 +40,7 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler {
         equipmentManager.EquipItem(item, slotItemType);
         equipmentManager.PrintEquipment();
 
-        newTooltip.SetTooltipItem(draggableItem.item);
+        newTooltip.SetTooltipItem(draggableItem.item, equipmentManager);
     }
 
     public void RemoveItem() {

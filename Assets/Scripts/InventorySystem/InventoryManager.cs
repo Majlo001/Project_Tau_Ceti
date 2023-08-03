@@ -196,8 +196,7 @@ public class InventoryManager : MonoBehaviour {
 
 
             NewTooltip newTooltip = slot.transform.Find("InventoryTooltip").GetComponent<NewTooltip>();
-            newTooltip.SetTooltipItem(customItem);
-
+            newTooltip.SetTooltipItem(customItem, equipmentManager, true);
 
             //TODO: Change outline to image or sth.
             // Outline itemOverlay = item.transform.Find("ItemOverlay").GetComponent<Outline>();

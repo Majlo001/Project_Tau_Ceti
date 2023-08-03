@@ -330,7 +330,6 @@ MonoBehaviour:
   statsPrefab: {fileID: 9084017640383940977, guid: a94712304f0852e4ca42089c7b97522a, type: 3}
   rectTransform: {fileID: 3069881463259135196}
   tooltipOffset: 5000
-  equipmentManager: {fileID: 0}
 --- !u!223 &9213839189603718858
 Canvas:
   m_ObjectHideFlags: 0
