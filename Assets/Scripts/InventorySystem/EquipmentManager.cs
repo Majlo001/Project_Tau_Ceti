@@ -127,6 +127,7 @@ public class EquipmentManager : MonoBehaviour {
     }
 
     public void PrintConsumables() {
+        PrintEquipment();
         string temp = "";
         string temptext;
 

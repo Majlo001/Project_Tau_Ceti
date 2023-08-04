@@ -6,7 +6,7 @@ using System.Reflection;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Inventory/Weapon")]
 public class Weapon : Item {
-    public int[] damageRange = new int[2];
+    public int[] damageRange = new int[2] { 0, 0 };
 
     public new WeaponStats itemStats = new WeaponStats();
     
@@ -22,8 +22,19 @@ public class Weapon : Item {
         return text;
     }
 
-    public override string TakeRangeText() {
+    public override string GetRangeText() {
         return $"Damage: {damageRange[0]} - {damageRange[1]}";
+    }
+
+    public override int[] GetRangeTab() {
+        return damageRange;
+    }
+
+    public override int getRangeIndex(int i) {
+        if (i < 0 || i > 1) {
+            return 0;
+        }
+        return damageRange[i];
     }
 }
 

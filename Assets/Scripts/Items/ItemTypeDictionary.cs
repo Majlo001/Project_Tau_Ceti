@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 
 
 /*
@@ -95,5 +95,12 @@ public class ItemTypeDictionary : MonoBehaviour {
             Debug.LogError("Invalid item type key: " + key);
             return -1;
         }
+    }
+
+    public bool isWearableItem(int itemType) {
+        if (itemTypeArmour.Contains(itemType) || itemTypeWeapons.Contains(itemType) || itemTypeShields.Contains(itemType))
+            return true;
+
+        return false;
     }
 }

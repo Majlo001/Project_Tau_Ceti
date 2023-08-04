@@ -64,8 +64,16 @@ public class Item : ScriptableObject {
         return itemStats;
     }
 
-    public virtual string TakeRangeText() {
+    public virtual string GetRangeText() {
         return null;
+    }
+
+    public virtual int[] GetRangeTab() {
+        return null;
+    }
+
+    public virtual int getRangeIndex(int i) {
+        return 0;
     }
 }
 
@@ -76,7 +84,6 @@ public class Stats {
     */
 
     public virtual StatsData[] GetStatsFields() {
-        Debug.Log("StatsData in Stats class");
         return null;
     }
 };

@@ -9,15 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68abcc78296cd2f43840d536bd0926ef, type: 3}
-  m_Name: Sword
+  m_Script: {fileID: 11500000, guid: 690959f77b1f7df4ca46073ec886dae1, type: 3}
+  m_Name: SwordWeapon 2
   m_EditorClassIdentifier: 
   itemId: 1
-  itemLevel: 1
+  itemLevel: 12
   itemType: 0
-  itemName: Sword
-  itemDescription: Just a long sword
+  itemName: Sword 2
+  itemDescription: 
   isStackable: 0
-  itemValue: 220
-  itemRarity: 3
+  itemValue: 2000
+  itemRarity: 1
   itemIcon: {fileID: 21300000, guid: 4b3baf1cef6149b4899e21b37c6e7f4a, type: 3}
+  damageRange: 5a00000078000000
+  itemStats:
+    fireDamage: 23
+    posionDamage: 0
+    iceDamage: 1
+    lightningDamage: 0
+    crushingDamage: 40
+    attackSpeed: 0.05
+    critChance: 10
+    critDamage: 0
