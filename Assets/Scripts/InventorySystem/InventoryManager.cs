@@ -148,7 +148,9 @@ public class InventoryManager : MonoBehaviour {
             return false;
         }
         items.Add(item);
-        RefreshInventory();
+
+        // TODO: Check if necessary (both)
+        // RefreshInventory();
         equipmentManager.UpdateEquippedConsumables();
         
         return true;

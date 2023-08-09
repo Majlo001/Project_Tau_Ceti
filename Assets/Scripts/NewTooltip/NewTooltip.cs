@@ -64,50 +64,15 @@ public class NewTooltip : MonoBehaviour{
 
         
 
-
-        if (string.IsNullOrEmpty(header)) {
-            headerField.gameObject.SetActive(false);
-        }
-        else {
-            headerField.gameObject.SetActive(true);
-            headerField.text = header;
-        }
-
+        SetActiveAndSetText(rarity, rarityField);
+        SetActiveAndSetText(content, contentField);
+        SetActiveAndSetText(header, headerField);
+        SetActiveAndSetText(value, valueField, "Value: ");
 
         SetRangeText();
 
-
-        if (string.IsNullOrEmpty(rarity)) {
-            rarityField.gameObject.SetActive(false);
-        }
-        else {
-            rarityField.gameObject.SetActive(true);
-            rarityField.text = rarity;
-        }
-
-        if (string.IsNullOrEmpty(content)) {
-            contentField.gameObject.SetActive(false);
-        }
-        else {
-            contentField.gameObject.SetActive(true);
-            contentField.text = content;
-        }
-
-        if (string.IsNullOrEmpty(level)) {
-            levelField.gameObject.SetActive(false);
-        }
-        else {
-            levelField.gameObject.SetActive(true);
-            levelField.text = "Level: " + level;
-        }
-
-        if (string.IsNullOrEmpty(value)) {
-            valueField.gameObject.SetActive(false);
-        }
-        else {
-            valueField.gameObject.SetActive(true);
-            valueField.text = "Value: " + value;
-        }
+        levelField.gameObject.SetActive(!string.IsNullOrEmpty(level) && level != "0");
+        levelField.text = level != "0" ? "Level: " + level : "";
         
         if (statsPrefab != null) {
             SetStats();
@@ -115,6 +80,11 @@ public class NewTooltip : MonoBehaviour{
             // statsPanel.gameObject.SetActive(false);
         }
         isChanged = false;
+    }
+
+    private void SetActiveAndSetText(string text, Text field, string prefix = "") {
+        field.gameObject.SetActive(!string.IsNullOrEmpty(text));
+        field.text = string.IsNullOrEmpty(text) ? "" : prefix + text;
     }
 
     private void SetRangeText(){
@@ -150,7 +120,7 @@ public class NewTooltip : MonoBehaviour{
         string rangeDifference = "";
 
         if (slotRangeDifference < 0)
-            rangeDifference = "<color=green>+ " + slotRangeDifference.ToString() + "</color>";
+            rangeDifference = "<color=green>+ " + Math.Abs(slotRangeDifference).ToString() + "</color>";
         else if (slotRangeDifference > 0)
             rangeDifference = "<color=red>- " + Math.Abs(slotRangeDifference).ToString() + "</color>";
 
@@ -186,13 +156,13 @@ public class NewTooltip : MonoBehaviour{
                 if (eqManager != null && showDiff) {
                     CustomItem slotItem = eqManager.takeItem(itemTypeString);
                     if (slotItem == null) {
-                        statDifference.text = "<color=green>+ " + statValue.text + "</color>";
+                        statDifference.text = $"<color=green>+ {stat.statValue.ToString()}{(stat.statValue is int ? "%" : "")}</color>";
                         continue;
                     }
 
                     Stats slotItemStats = slotItem.GetStats();
                     if (slotItemStats == null) {
-                        statDifference.text = "<color=green>+ " + statValue.text + "</color>";
+                        statDifference.text = $"<color=green>+ {stat.statValue.ToString()}{(stat.statValue is int ? "%" : "")}</color>";
                         continue;
                     }
 
@@ -207,11 +177,11 @@ public class NewTooltip : MonoBehaviour{
                                 int difference = (int)stat.statValue - (int)slotStat.statValue;
                                 statDifference.text = difference.ToString();
                                 if (difference > 0)
-                                    statDifference.text = "<color=green>+ " + difference.ToString() + "</color>";
+                                    statDifference.text = "<color=green>+ " + difference.ToString() + "%</color>";
                                 else if (difference == 0)
                                     statDifference.text = "";
                                 else
-                                    statDifference.text = "<color=red>- " + Math.Abs(difference).ToString() + "</color>";
+                                    statDifference.text = "<color=red>- " + Math.Abs(difference).ToString() + "%</color>";
                             }
                             else if (slotStat.statValue is float) {
                                 float difference = (float)Math.Round((float)stat.statValue - (float)slotStat.statValue, 2);
@@ -266,12 +236,10 @@ public class NewTooltip : MonoBehaviour{
     }
 
     private void RefreshContent() {
-        if (statsPrefab != null) {
-            if (eqManager != null && showDiff) {
-                ClearStatsPanel();
-                SetRangeText();
-                SetStats();
-            }
+        if (eqManager != null && showDiff) {
+            ClearStatsPanel();
+            SetRangeText();
+            SetStats();
         }
     }
 
