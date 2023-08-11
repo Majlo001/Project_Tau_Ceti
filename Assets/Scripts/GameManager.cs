@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour{
     public static GameManager instance;
     private PlayerController playerController;
     private InventoryManager inventoryManager;
+    private EquipmentManager equipmentManager;
     private LootSystem lootSystem;
 
     public bool isMenuOpen = false;
@@ -28,10 +29,13 @@ public class GameManager : MonoBehaviour{
     void Start() {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        equipmentManager = GameObject.Find("InventoryManager").GetComponent<EquipmentManager>();
         lootSystem = GameObject.Find("InventoryManager").GetComponent<LootSystem>();
     }
 
     void Update() {
+
+        /// Opening and closing pause menu
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (isLootBoxOpen || !canPressEscape)
                 return;
@@ -48,11 +52,11 @@ public class GameManager : MonoBehaviour{
             }
         }
 
+        /// Opening and closing inventory
         if (Input.GetKeyDown(KeyCode.I)) {
             if (isPaused)
                 return;
 
-            Debug.Log("I pressed: " + isLootBoxOpen);
             if (isLootBoxOpen){
                 hideLootBox();
             }
@@ -69,9 +73,27 @@ public class GameManager : MonoBehaviour{
             }
         }
 
+
         if (!canPressEscape) {
             isLootBoxOpen = false;
             canPressEscape = true;
+        }
+
+
+        /// Using Consumables 
+        if (!isLootBoxOpen && !isMenuOpen && !isPaused) {
+            if (Input.GetKeyDown(KeyCode.Z)) {
+                equipmentManager.UseConsumable(0);
+            } 
+            else if (Input.GetKeyDown(KeyCode.X)) {
+                equipmentManager.UseConsumable(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.C)) {
+                equipmentManager.UseConsumable(2);
+            }
+            else if (Input.GetKeyDown(KeyCode.V)) {
+                equipmentManager.UseConsumable(3);
+            }
         }
     }
 

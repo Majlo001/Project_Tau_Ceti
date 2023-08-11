@@ -19,17 +19,16 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
         if (draggableItem == null)
             return;
 
-        if (draggableItem.parentAfterDrag.transform.parent.name != "Inventory") {
+        if (draggableItem.parentAfterDrag.transform.parent.transform.parent.name != "Inventory") {
             item = draggableItem.item;
             bool canBeReturned = inventoryManager.ReturnToInventory(item);
-            Debug.Log("Can be returned: " + canBeReturned);
 
             if(canBeReturned) {
-                draggableItem.parentAfterDrag = transform;
+                // draggableItem.parentAfterDrag = transform;
                 
-                EquipmentSlot slot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
-                if (slot != null) {
-                    slot.RemoveItem();
+                EquipmentSlot equipmentSlot = draggableItem.parentAfterDrag.GetComponent<EquipmentSlot>();
+                if (equipmentSlot != null) {
+                    equipmentSlot.RemoveItem();
                 }
                 else {
                     ConsumableSlot consumableSlot = draggableItem.parentAfterDrag.GetComponent<ConsumableSlot>();

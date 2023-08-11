@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class EquipmentManager : MonoBehaviour {
     
     public static EquipmentManager instance;
+    private ConsumablesHotbarController consumablesHotbarController;
 
     public GameObject equipmentUI;
     public GameObject weaponSlot;
@@ -30,6 +31,7 @@ public class EquipmentManager : MonoBehaviour {
         }
 
         instance = this;
+        consumablesHotbarController = transform.GetComponent<ConsumablesHotbarController>();
 
         equippedItems.Add("Weapon", null);
         equippedItems.Add("Helmet", null);
@@ -57,6 +59,10 @@ public class EquipmentManager : MonoBehaviour {
         equippedItems[slotType] = null;
     }
 
+    public CustomItem takeItem(string slotType) {
+        return equippedItems[slotType];
+    }
+
     
     public void EquipConsumable(CustomItem item, int slotNumber) {
         if (equippedConsumables[slotNumber] != null) {
@@ -64,11 +70,13 @@ public class EquipmentManager : MonoBehaviour {
         }
 
         equippedConsumables[slotNumber] = item;
-        PrintConsumables();
+        //PrintConsumables();
+        consumablesHotbarController.UpdateHotbarItems();
     }
 
     public void UnequipConsumable(int slotNumber) {
         equippedConsumables[slotNumber] = null;
+        consumablesHotbarController.UpdateHotbarItems();
     }
 
     public void SwapConsumable(int slotNumber1, int slotNumber2) {
@@ -76,7 +84,8 @@ public class EquipmentManager : MonoBehaviour {
         
         equippedConsumables[slotNumber1] = equippedConsumables[slotNumber2];
         equippedConsumables[slotNumber2] = tempItem;
-        PrintConsumables();
+        //PrintConsumables();
+        consumablesHotbarController.UpdateHotbarItems();
     }
 
     public bool AddToEquippedConsumable(Item item, int count) {
@@ -95,7 +104,27 @@ public class EquipmentManager : MonoBehaviour {
     }
 
     private void UpdateItemCountText(int i) {
-        consumableSlots[i].GetComponentInChildren<Text>().text = consumableSlots[i].GetComponent<ConsumableSlot>().item.itemCount.ToString();
+        consumableSlots[i].transform.GetChild(0).GetComponentInChildren<Text>().text = equippedConsumables[i].itemCount.ToString();
+        consumablesHotbarController.UpdateHotbarItemCountText(i);
+    }
+
+    public void UseConsumable(int i) {
+        if (equippedConsumables[i] != null) {
+            if (equippedConsumables[i].itemCount > 0) {
+                equippedConsumables[i].itemCount--;
+                UpdateItemCountText(i);
+
+                // TODO: Use Item
+                // equippedConsumables[i].item.Use();
+            }
+
+            if (equippedConsumables[i].itemCount == 0) {
+                // TODO: Is Item Destroyed?
+                ConsumableSlot consumableSlot = consumableSlots[i].transform.GetChild(0).GetComponent<ConsumableSlot>();
+                consumableSlot.RemoveItem();
+                consumableSlot.RemoveDraggableItem();
+            }
+        }
     }
 
 
@@ -107,8 +136,8 @@ public class EquipmentManager : MonoBehaviour {
             
             temptext = "null";
             if (slotObjects.TryGetValue(equippedItem.Key, out GameObject slot)) {
-                if (slot.GetComponent<EquipmentSlot>().item != null) {
-                    temptext = slot.GetComponent<EquipmentSlot>().item.item.itemName;
+                if (slot.transform.GetChild(0).GetComponent<EquipmentSlot>().item != null) {
+                    temptext = slot.transform.GetChild(0).GetComponent<EquipmentSlot>().item.item.itemName;
                 }
             }
                 
@@ -123,12 +152,13 @@ public class EquipmentManager : MonoBehaviour {
     }
 
     public void PrintConsumables() {
+        //PrintEquipment();
         string temp = "";
         string temptext;
 
         for(int i=0; i < consumablesSlotCount; i++){
-            if (consumableSlots[i].GetComponent<ConsumableSlot>().item != null) {
-                temptext = consumableSlots[i].GetComponent<ConsumableSlot>().item.item.itemName;
+            if (consumableSlots[i].transform.GetChild(0).GetComponent<ConsumableSlot>().item != null) {
+                temptext = consumableSlots[i].transform.GetChild(0).GetComponent<ConsumableSlot>().item.item.itemName;
             } else {
                 temptext = "null";
             }

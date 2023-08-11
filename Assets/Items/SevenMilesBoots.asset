@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc44c29f753b48448113869a0a2991a, type: 3}
+  m_Name: SevenMilesBoots
+  m_EditorClassIdentifier: 
+  itemId: 20
+  itemLevel: 0
+  itemType: 1
+  itemName: 
+  itemDescription: 
+  isStackable: 0
+  itemValue: 0
+  itemRarity: 0
+  itemIcon: {fileID: 21300000, guid: 51118baa0e5111c4abe5add6049e66ab, type: 3}
+  protection: 0
+  fireResistance: 0
+  agility: 0

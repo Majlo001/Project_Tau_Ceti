@@ -14,17 +14,29 @@ public class Tooltip : MonoBehaviour {
     //TODO: levelField
 
 
+    private Canvas canvas;
+    private Vector3 slotPosition;
+    private Vector3 slotPos;
+
     public LayoutElement layoutElement;
 
     public int characterWrapLimit;
 
     public RectTransform rectTransform;
 
+    private bool isOpened;
+    private bool canBeOpened;
+
+
+
+
+
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
     }
 
-    public void SetText(string header, string rarity, string content, string stats) {
+    public void SetText(string header, string rarity, string content, string stats, Vector3 slotPosition, Transform slotTransform) {
 
         // Temporary solution
         if (string.IsNullOrEmpty(header)) {
@@ -60,24 +72,41 @@ public class Tooltip : MonoBehaviour {
         }
     }
 
-    private void Update() {
-        if (Application.isEditor) {
-            int headerLength = headerField.text.Length;
-            int contentLength = contentField.text.Length;
-
-            layoutElement.enabled = (headerLength > characterWrapLimit || contentLength > characterWrapLimit);
-        }
-
-        Vector3 mousePosition = Input.mousePosition;
-        Vector3 tooltipPosition = mousePosition + new Vector3(30f, -10f, 0f); // Przesunięcie tooltipu względem kursora
-
-        // Sprawdź, czy tooltip znajduje się na prawej stronie ekranu
-        if (tooltipPosition.x + rectTransform.rect.width > Screen.width)
-        {
-            tooltipPosition -= new Vector3(rectTransform.rect.width + 60f, 0f, 0f); // Przesunięcie tooltipu na lewo
-        }
-
-        rectTransform.position = tooltipPosition;
+    public void SetPosition (Vector3 position, Transform slotTransform) {
+        slotPos = position;
     }
 
+    private void Update() {
+        float tooltipWidth = layoutElement.transform.GetComponent<RectTransform>().rect.width * canvas.scaleFactor;
+        float tooltipHeight = layoutElement.transform.GetComponent<RectTransform>().rect.height * canvas.scaleFactor;
+        
+        float slotWidth = 46.5f * canvas.scaleFactor;
+        float slotHeight = 46.5f * canvas.scaleFactor;
+
+        slotPosition = slotPos - new Vector3(-tooltipWidth/2f + slotWidth, tooltipHeight/2f + slotHeight, 0f);
+        // Debug.Log("Position: " + pos + " tooltipWidth: " + tooltipWidth + " tooltipHeight: " + tooltipHeight);
+
+        if (rectTransform.position != slotPosition && slotPosition != Vector3.zero) {
+            rectTransform.position = slotPosition;
+        }
+
+
+
+        // Vector3 mousePosition = Input.mousePosition;
+        // Vector3 tooltipPosition = mousePosition + new Vector3(10f, 0f, 0f);
+
+        // float tooltipWidth = rectTransform.rect.width;
+        // float tooltipHeight = rectTransform.rect.height;
+
+        // float windowWidth = Screen.width;
+        // float windowHeight = Screen.height;
+
+
+        // Debug.Log("windowHeight: " + windowHeight + " widnowWidth: " + windowWidth);
+        // Debug.Log("tooltipPosition.x: " + tooltipPosition.x + " tooltipPosition.y: " + tooltipPosition.y);
+        // if (tooltipPosition.y - tooltipHeight < 0) {
+        //     Debug.Log("DOWN");
+        //     tooltipPosition.y = mousePosition.y + tooltipHeight - 10f;
+        // }
+    }
 }

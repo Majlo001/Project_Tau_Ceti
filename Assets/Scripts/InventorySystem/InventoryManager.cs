@@ -10,8 +10,11 @@ public class CustomItemComparer : IComparer<CustomItem> {
         if (x.item.itemLevel != y.item.itemLevel) {
             return y.item.itemLevel.CompareTo(x.item.itemLevel);
         }
-        else {
+        else if (x.item.itemRarity != y.item.itemRarity) {
             return y.item.itemRarity.CompareTo(x.item.itemRarity);
+        }
+        else {
+            return x.item.itemName.CompareTo(y.item.itemName);
         }
     }
 }
@@ -22,6 +25,20 @@ public class CustomItem {
     public int itemCount;
     public int itemLevel;
     public bool isUpgraded;
+    public Stats itemUpgradedStats;
+
+    ~CustomItem() {
+        item = null;
+        itemUpgradedStats = null;
+    }
+
+    public Stats GetStats() {
+        if (item is Weapon) {
+            return ((Weapon)item).itemStats;
+        }
+
+        return null;
+    }
 
     public CustomItem(Item item, int count, int level = 0) {
         this.item = item;
@@ -67,6 +84,7 @@ public class InventoryManager : MonoBehaviour {
 
         instance = this;
     }
+
     public bool AddItem(Item item, int count = 1) {
         if (item == null)
             return false;
@@ -128,8 +146,11 @@ public class InventoryManager : MonoBehaviour {
             return false;
         }
         items.Add(item);
-        RefreshInventory();
+
+        // TODO: Check if necessary (both)
+        // RefreshInventory();
         equipmentManager.UpdateEquippedConsumables();
+        RefreshInventory();
         
         return true;
     }
@@ -154,7 +175,7 @@ public class InventoryManager : MonoBehaviour {
     public void AddToInventorySlots() {
         foreach (CustomItem customItem in items) {
             GameObject slot = Instantiate(inventorySlot, itemContent);
-            GameObject item = Instantiate(inventoryItem, slot.transform);
+            GameObject item = Instantiate(inventoryItem, slot.transform.Find("InventorySlot").transform);
 
             item.GetComponent<DraggableItem>().item = customItem;
             Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
@@ -174,6 +195,9 @@ public class InventoryManager : MonoBehaviour {
             itemImage.sprite = customItem.item.itemIcon;
 
 
+            NewTooltip newTooltip = slot.transform.Find("InventoryTooltip").GetComponent<NewTooltip>();
+            newTooltip.SetTooltipItem(customItem, equipmentManager, true);
+
             //TODO: Change outline to image or sth.
             // Outline itemOverlay = item.transform.Find("ItemOverlay").GetComponent<Outline>();
             
@@ -189,7 +213,6 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
-    // TODO: Check if it works
     public void SortItemsByLevelAndRarity() {
         items.Sort(new CustomItemComparer());
     }
@@ -211,8 +234,8 @@ public class InventoryManager : MonoBehaviour {
     private void RefreshInventory() {
         if (showAllTypes) {
             ClearInventorySlots();
-            AddToInventorySlots();
             SortItemsByLevelAndRarity();
+            AddToInventorySlots();
             AddInventorySlots(inventorySlotCount - items.Count);
         } 
         else {
@@ -230,6 +253,7 @@ public class InventoryManager : MonoBehaviour {
     public void showAllItemTypes() {
         showAllTypes = true;
         currentItemTypes = null;
+
         RefreshInventory();
     }
 
@@ -242,7 +266,7 @@ public class InventoryManager : MonoBehaviour {
         foreach (CustomItem customItem in items) {
             if (itemTypes.Any(itemType => itemType == customItem.item.itemType)) {
                 GameObject slot = Instantiate(inventorySlot, itemContent);
-                GameObject item = Instantiate(inventoryItem, slot.transform);
+                GameObject item = Instantiate(inventoryItem, slot.transform.Find("InventorySlot").transform);
 
                 item.GetComponent<DraggableItem>().item = customItem;
                 Text itemCountText = item.transform.Find("ItemCount").GetComponent<Text>();
@@ -260,6 +284,9 @@ public class InventoryManager : MonoBehaviour {
                     itemLevelText.text = "";
 
                 itemImage.sprite = customItem.item.itemIcon;
+
+                NewTooltip newTooltip = slot.transform.Find("InventoryTooltip").GetComponent<NewTooltip>();
+                newTooltip.SetTooltipItem(customItem, equipmentManager, true);
             }
         }
 
