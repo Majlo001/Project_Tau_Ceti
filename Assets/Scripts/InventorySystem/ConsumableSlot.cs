@@ -6,7 +6,6 @@ using System.Linq;
 
 public class ConsumableSlot : MonoBehaviour, IDropHandler {
 
-    // private string slotItemType;
     public int slotNumber;
     private InventoryManager inventoryManager;
     private EquipmentManager equipmentManager;
@@ -58,10 +57,8 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
         else if (transform.childCount > 0 && item != null) {
             bool canBeReturned = inventoryManager.ReturnToInventory(item, true);
 
-            // if (canBeReturned) {
             GameObject childObject = transform.GetChild(0).gameObject;
             Destroy(childObject);
-            // }
         }
 
         draggableItem.parentAfterDrag = transform;
@@ -78,5 +75,12 @@ public class ConsumableSlot : MonoBehaviour, IDropHandler {
     public void RemoveItem() {
         item = null;
         equipmentManager.UnequipConsumable(slotNumber);
+    }
+
+    public void RemoveDraggableItem() {
+        if (transform.childCount > 0) {
+            GameObject childObject = transform.GetChild(0).gameObject;
+            Destroy(childObject);
+        }
     }
 }

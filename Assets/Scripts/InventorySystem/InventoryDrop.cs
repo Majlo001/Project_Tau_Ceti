@@ -22,7 +22,6 @@ public class InventoryDrop : MonoBehaviour, IDropHandler {
         if (draggableItem.parentAfterDrag.transform.parent.transform.parent.name != "Inventory") {
             item = draggableItem.item;
             bool canBeReturned = inventoryManager.ReturnToInventory(item);
-            // Debug.Log("Can be returned: " + canBeReturned);
 
             if(canBeReturned) {
                 // draggableItem.parentAfterDrag = transform;
